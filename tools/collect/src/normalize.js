@@ -106,11 +106,14 @@ function normalize(it, cat) {
     if (jpCount >= 2) reasons.push(`wikipedia:${jpCount}`);
   }
 
-  // 場所の表示：場所（P276）→ 行政区画（P131）→ 国の日本語名
+  // 場所の表示：場所（P276）→ 行政区画（P131）→ 国の日本語名。
+  // 日本語ラベルがローマ字だけのもの（「Serdivan」など）は使わない。どれもなければ null にし、
+  // アプリが国（country）の日本語名を出す
+  const ja = (l) => l?.label_ja && JA_CHAR.test(l.label_ja);
   const place =
-    (it.locations || []).find((l) => l.label_ja)?.label_ja ||
-    (it.admins || []).find((a) => a.label_ja)?.label_ja ||
-    countryInfo[(it.countries || [])[0]]?.label_ja ||
+    (it.locations || []).find(ja)?.label_ja ||
+    (it.admins || []).find(ja)?.label_ja ||
+    [countryInfo[(it.countries || [])[0]]].find(ja)?.label_ja ||
     null;
 
   return {
