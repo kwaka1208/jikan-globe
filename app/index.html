@@ -178,7 +178,7 @@ const CELL=18;          // 点をまとめる升目の大きさ（px）
 const LIST_N={jp:3,w:6}; // リストの最初の件数。「もっと見る」で同じ数ずつ増やす
 
 // ---- 状態 ----
-const S={year:1600,country:'Japan',ev:null,rot:[-138,-36,0],zoom:1,cats:new Set(),more:{jp:0,w:0},all:location.hash==='#all'};
+const S={year:1868,country:'Japan',ev:null,rot:[-138,-36,0],zoom:1,cats:new Set(),more:{jp:0,w:0},all:location.hash==='#all'};
 let META=null;
 const E=[],byId=new Map();          // 読みこんだできごと（索引＋チャンク）
 const chunkState=new Map();          // file -> 'loading' | 'done'
@@ -387,7 +387,7 @@ Promise.all([getJSON('countries.json'),getJSON('data/meta.json'),getJSON('data/i
  new ResizeObserver(size).observe(host);
  // ?year=1868 で始めの年を指定できる。紀元前はマイナス（?year=-490 は紀元前490年）。範囲外は端に寄せる
  const qy=Number.parseInt(new URLSearchParams(location.search).get('year'),10);
- setYear(Number.isFinite(qy)?qy:1600);
+ setYear(Number.isFinite(qy)?qy:1868);
  const first=E.find(e=>e.y===S.year&&e.jp&&e.src==='seed')||E.find(e=>e.y===S.year&&e.jp);
  if(first)pickEvent(first.i,false);
 }).catch(err=>{console.error(err);$('loading').textContent='データを読みこめませんでした。ページを開き直してください。';
