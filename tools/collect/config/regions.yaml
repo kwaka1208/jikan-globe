@@ -1,0 +1,52 @@
+# 国 → 地域の対応（HANDOFF 6.3：地域と時代の偏りの補正に使う）
+# 国名は app/countries.json（Natural Earth 表記）と同じ。177か国すべてをどこかに入れる。
+# 8地域に分けにくい国は次のように扱う：
+#   東南アジア → south_asia、中央アジア・コーカサス → west_asia、
+#   ロシア → europe、エジプト → africa、南極など → oceania
+
+regions:
+  east_asia:
+    label: 東アジア
+    countries: [Japan, China, Taiwan, South Korea, North Korea, Mongolia]
+
+  south_asia:
+    label: 南・東南アジア
+    countries: [India, Pakistan, Bangladesh, Nepal, Bhutan, Sri Lanka, Afghanistan,
+      Myanmar, Thailand, Laos, Cambodia, Vietnam, Malaysia, Brunei, Indonesia, Philippines, Timor-Leste]
+
+  west_asia:
+    label: 西・中央アジア
+    countries: [Iran, Iraq, Syria, Lebanon, Israel, Palestine, Jordan, Saudi Arabia, Yemen, Oman,
+      United Arab Emirates, Qatar, Kuwait, Turkey, Cyprus, N. Cyprus, Georgia, Armenia, Azerbaijan,
+      Kazakhstan, Uzbekistan, Turkmenistan, Kyrgyzstan, Tajikistan]
+
+  europe:
+    label: ヨーロッパ
+    countries: [United Kingdom, Ireland, France, Spain, Portugal, Italy, Germany, Netherlands, Belgium,
+      Luxembourg, Switzerland, Austria, Denmark, Norway, Sweden, Finland, Iceland, Poland, Czechia,
+      Slovakia, Hungary, Slovenia, Croatia, Bosnia and Herz., Serbia, Montenegro, Kosovo, Macedonia,
+      Albania, Greece, Bulgaria, Romania, Moldova, Ukraine, Belarus, Lithuania, Latvia, Estonia, Russia]
+
+  africa:
+    label: アフリカ
+    countries: [Egypt, Libya, Tunisia, Algeria, Morocco, W. Sahara, Mauritania, Mali, Niger, Chad, Sudan,
+      S. Sudan, Eritrea, Ethiopia, Djibouti, Somalia, Somaliland, Kenya, Uganda, Rwanda, Burundi, Tanzania,
+      Senegal, Gambia, Guinea-Bissau, Guinea, Sierra Leone, Liberia, Côte d'Ivoire, Ghana, Togo, Benin,
+      Burkina Faso, Nigeria, Cameroon, Central African Rep., Eq. Guinea, Gabon, Congo, Dem. Rep. Congo,
+      Angola, Zambia, Malawi, Mozambique, Zimbabwe, Botswana, Namibia, South Africa, Lesotho, eSwatini,
+      Madagascar]
+
+  north_america:
+    label: 北アメリカ
+    countries: [United States of America, Canada, Greenland]
+
+  latin_america:
+    label: 中南アメリカ
+    countries: [Mexico, Guatemala, Belize, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, Cuba,
+      Jamaica, Haiti, Dominican Rep., Puerto Rico, Bahamas, Trinidad and Tobago, Colombia, Venezuela,
+      Guyana, Suriname, Ecuador, Peru, Bolivia, Brazil, Paraguay, Uruguay, Argentina, Chile, Falkland Is.]
+
+  oceania:
+    label: オセアニア
+    countries: [Australia, New Zealand, Papua New Guinea, Solomon Is., Vanuatu, Fiji, New Caledonia,
+      Antarctica, Fr. S. Antarctic Lands]

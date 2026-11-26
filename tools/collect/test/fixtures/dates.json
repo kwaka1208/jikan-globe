@@ -1,0 +1,163 @@
+{
+ "note": "2026-11-26 にWDQSと wbgetentities から記録。WDQSの値を暦年に変換した結果が、本体JSONの年と一致するかを確かめる",
+ "events": [
+  {
+   "title": "アポロ11号",
+   "qid": "Q43653",
+   "wdqs": [
+    {
+     "prop": "P619",
+     "time": "1969-07-16T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985727"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P619",
+     "time": "+1969-07-16T00:00:00Z",
+     "precision": 11
+    }
+   ]
+  },
+  {
+   "title": "サラミスの海戦",
+   "qid": "Q178850",
+   "wdqs": [
+    {
+     "prop": "P585",
+     "time": "-0479-09-22T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    },
+    {
+     "prop": "P585",
+     "time": "-0479-09-24T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P585",
+     "time": "-0480-09-29T00:00:00Z",
+     "precision": 11
+    },
+    {
+     "prop": "P585",
+     "time": "-0480-09-27T00:00:00Z",
+     "precision": 11
+    }
+   ]
+  },
+  {
+   "title": "コンスタンティノープルの陥落",
+   "qid": "Q160077",
+   "wdqs": [
+    {
+     "prop": "P580",
+     "time": "1453-04-15T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P580",
+     "time": "+1453-04-06T00:00:00Z",
+     "precision": 11
+    }
+   ]
+  },
+  {
+   "title": "首里城",
+   "qid": "Q907052",
+   "wdqs": [
+    {
+     "prop": "P571",
+     "time": "1400-01-01T00:00:00Z",
+     "precision": 7,
+     "calendar": "Q1985786"
+    },
+    {
+     "prop": "P571",
+     "time": "1958-01-01T00:00:00Z",
+     "precision": 9,
+     "calendar": "Q1985727"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P571",
+     "time": "+1958-00-00T00:00:00Z",
+     "precision": 9
+    },
+    {
+     "prop": "P571",
+     "time": "+1400-00-00T00:00:00Z",
+     "precision": 7
+    }
+   ]
+  },
+  {
+   "title": "マラトンの戦い",
+   "qid": "Q31900",
+   "wdqs": [
+    {
+     "prop": "P585",
+     "time": "-0489-08-07T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    },
+    {
+     "prop": "P585",
+     "time": "-0489-09-05T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    },
+    {
+     "prop": "P585",
+     "time": "-0489-09-07T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985786"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P585",
+     "time": "-0490-09-12T00:00:00Z",
+     "precision": 11
+    },
+    {
+     "prop": "P585",
+     "time": "-0490-08-12T00:00:00Z",
+     "precision": 11
+    },
+    {
+     "prop": "P585",
+     "time": "-0490-09-10T00:00:00Z",
+     "precision": 11
+    }
+   ]
+  },
+  {
+   "title": "関ヶ原の戦い",
+   "qid": "Q234188",
+   "wdqs": [
+    {
+     "prop": "P585",
+     "time": "1600-10-21T00:00:00Z",
+     "precision": 11,
+     "calendar": "Q1985727"
+    }
+   ],
+   "wikidata_json": [
+    {
+     "prop": "P585",
+     "time": "+1600-10-21T00:00:00Z",
+     "precision": 11
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "jikan-no-chikyugi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "じかんの地球儀：できごとデータの収集スクリプトとアプリ",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "fetch": "node tools/collect/src/fetch.js",
+    "normalize": "node tools/collect/src/normalize.js",
+    "score": "node tools/collect/src/score.js",
+    "draft": "node tools/collect/src/draft.js",
+    "review:export": "node tools/collect/src/review.js export",
+    "review:import": "node tools/collect/src/review.js import",
+    "build": "node tools/collect/src/build.js",
+    "all": "npm run fetch && npm run normalize && npm run score && npm run draft && npm run build",
+    "report": "node tools/collect/src/report.js",
+    "test": "node --test tools/collect/test/*.test.js"
+  },
+  "dependencies": {
+    "csv-parse": "^7.0.3",
+    "csv-stringify": "^6.9.0",
+    "d3-geo": "^3.1.2",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2",
+    "yaml": "^2.9.1"
+  }
+}

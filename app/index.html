@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>じかんの地球儀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: やさしく、わくわくする。子どもが自分で回して確かめる道具
+   IDEA: 教室の地球儀に「年のつまみ」がついたもの
+   PICTURE: 夜空に浮かぶ地球儀。日本はいつも赤く光り、できごとが点で浮かぶ
+   COLOUR and TYPE: 夜空ネイビー #202f55、海の青、砂色の陸、日本の赤。M PLUS Rounded 1c
+   LAYOUT: 地球儀が主役。右（スマホでは下）に「そのころ日本では／世界では」、下に年のつまみ */
+:root{color-scheme:light dark;--bg:light-dark(#f4f6fb,#0c1222);--ink:light-dark(#18213a,#e9edf7);--sub:light-dark(#5b6684,#a7b1cc);--card:light-dark(#ffffff,#162039);--line:light-dark(#e2e6f0,#273253);--navy:#202f55;--red:#e5473b;--red2:light-dark(#fde9e6,#3a1f2a);--teal:#2aa597}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "M PLUS Rounded 1c","Hiragino Maru Gothic ProN","Hiragino Sans",sans-serif;overflow-x:clip}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid #ffb4ab;outline-offset:2px}
+.sky{background:radial-gradient(1px 1px at 12% 20%,#fff9 50%,transparent 51%),radial-gradient(1.5px 1.5px at 78% 12%,#fffa 50%,transparent 51%),radial-gradient(1px 1px at 40% 70%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 88% 64%,#fff7 50%,transparent 51%),radial-gradient(1.5px 1.5px at 22% 86%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 60% 34%,#fff6 50%,transparent 51%),linear-gradient(180deg,#1a2648,var(--navy) 40%,#26386a);color:#fff;padding:20px max(4vw,16px) 22px}
+.wrap{max-width:1240px;margin:0 auto}
+header h1{margin:0;font-size:clamp(28px,4vw,42px);line-height:1.1;font-weight:800;letter-spacing:.02em}
+header p{margin:6px 0 0;color:#c9d3ee;font-size:15px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto 1fr;align-content:start;grid-template-areas:"globe info" "time info";gap:14px 24px;margin-top:14px}
+#globe{grid-area:globe;position:relative;height:clamp(340px,60vh,600px);border-radius:20px}
+#globe{touch-action:none;cursor:grab}
+#globe.grabbing{cursor:grabbing}
+#globe svg,#globe canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+#globe .gbtn{z-index:2}
+.loading{position:absolute;inset:0;display:grid;place-items:center;color:#c9d3ee;font-weight:700;pointer-events:none}
+.gbtn{position:absolute;display:flex;gap:8px}
+.gbtn.tl{top:6px;left:6px}.gbtn.br{bottom:6px;right:6px;flex-direction:column}
+.chip{min-height:44px;min-width:44px;padding:0 16px;border-radius:999px;border:1px solid #ffffff40;background:#ffffff1c;color:#fff;font-weight:700;font-size:15px;backdrop-filter:blur(4px)}
+.chip:hover{background:#ffffff33}
+.chip.jp{background:var(--red);border-color:var(--red)}
+.land{fill:#e9dfc4;stroke:#9c8f6f;stroke-width:.5}
+.land.jp{fill:var(--red);stroke:#fff;stroke-width:.8}
+.land.sel{fill:#8fe0d3;stroke:#fff;stroke-width:1}
+.land.jp.sel{fill:#ff6b5e}
+.grat{fill:none;stroke:#ffffff22;stroke-width:.6}
+.dot{stroke-width:1.5;cursor:pointer}
+.dot.w{fill:#fff;stroke:#1b2a52}.dot.j{fill:var(--red);stroke:#fff}
+.ring{fill:none;stroke:#fff;stroke-width:2.5;pointer-events:none}
+.glabel{font-size:13px;font-weight:800;fill:#fff;paint-order:stroke;stroke:#1b2a52;stroke-width:3.5px;pointer-events:none}
+@media (prefers-reduced-motion:no-preference){.ring{animation:pulse 1.6s ease-out infinite;transform-box:fill-box;transform-origin:center}@keyframes pulse{0%{opacity:1;transform:scale(.7)}100%{opacity:0;transform:scale(1.8)}}}
+.time{grid-area:time;align-self:start}
+.row{display:flex;align-items:center;gap:10px}
+.play{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:var(--navy);font-size:18px;font-weight:800}
+.step{flex:none;min-width:44px;height:44px;border-radius:12px;border:1px solid #ffffff40;background:transparent;color:#fff;font-weight:700}
+.track{position:relative;flex:1;padding-bottom:22px}
+input[type=range]{width:100%;margin:0;height:44px;background:transparent;-webkit-appearance:none;appearance:none}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:8px;background:#ffffff33}
+input[type=range]::-moz-range-track{height:8px;border-radius:8px;background:#ffffff33}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;margin-top:-10px;border-radius:50%;background:#fff;border:5px solid var(--red);box-shadow:0 2px 8px #0006}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:5px solid var(--red)}
+.band{position:absolute;left:0;right:0;bottom:16px;height:6px;border-radius:6px;overflow:hidden;pointer-events:none}
+.band i{position:absolute;top:0;bottom:0;background:#ffffff30}
+.band i:nth-child(odd){background:#ffffff55}.band i.on{background:var(--red)}
+.ticks{position:absolute;left:0;right:0;bottom:-4px;height:18px;font-size:13px;color:#c9d3ee}
+.ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.ticks span:first-child{transform:none}.ticks span:last-child{transform:translateX(-100%)}
+.eras{display:flex;gap:6px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:thin}
+.eras button{flex:none;min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #ffffff40;background:transparent;color:#fff;font-size:14px;font-weight:700}
+.eras button.on{background:var(--red);border-color:var(--red)}
+.info{grid-area:info;background:var(--card);color:var(--ink);border-radius:20px;padding:20px;align-self:start;box-shadow:0 10px 30px #0003}
+.yr{font-size:clamp(36px,5vw,50px);font-weight:800;line-height:1.05;color:var(--ink)}
+.jpera{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:6px 14px;border-radius:999px;background:var(--red2);color:var(--ink);font-weight:700}
+.jpera b{color:var(--red);font-size:18px}
+.note{font-size:13px;color:var(--sub);margin:8px 0 0}
+h2{font-size:17px;margin:20px 0 8px;display:flex;align-items:center;gap:8px}
+h2 .mk{width:12px;height:12px;border-radius:50%;flex:none;border:2px solid #fff;box-shadow:0 0 0 1px #0003}
+.list{display:grid;gap:8px}
+.ev{display:block;width:100%;text-align:left;border:1px solid var(--line);background:transparent;border-radius:14px;padding:10px 12px;min-height:44px}
+.ev:hover{border-color:var(--sub)}
+.ev.on{border-color:var(--red);box-shadow:0 0 0 2px var(--red) inset}
+.ev .when{display:block;font-size:13px;color:var(--sub)}
+.ev b{display:block;font-size:16px;line-height:1.4}
+.ev .pl{display:block;font-size:13px;color:var(--sub)}
+.ev p{margin:6px 0 0;font-size:15px;line-height:1.65}
+.tag{display:inline-block;margin:6px 6px 0 0;padding:1px 10px;border-radius:999px;font-size:13px;background:var(--red2);color:var(--ink)}
+.tag.link{background:transparent;border:1px solid var(--red);color:var(--red)}
+.empty{font-size:14px;color:var(--sub);margin:0}
+.tag.un{background:transparent;border:1px dashed var(--sub);color:var(--sub)}
+.src{display:block;margin-top:6px;font-size:13px;color:var(--sub)}
+.src a{color:inherit}
+.more{width:100%;min-height:44px;border:1px dashed var(--line);background:transparent;border-radius:14px;color:var(--sub);font-weight:700}
+.more:hover{border-color:var(--sub);color:var(--ink)}
+.cats{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 2px 0}
+.cats>span{font-size:13px;color:#c9d3ee;margin-right:4px}
+.cats button{min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #ffffff40;background:transparent;color:#c9d3ee;font-size:14px;font-weight:700}
+.cats button[aria-pressed=true]{background:#ffffff26;border-color:#ffffffaa;color:#fff}
+.cats button[aria-pressed=true]::before{content:"✓ "}
+footer{padding:20px max(4vw,16px) 36px;font-size:13px;color:var(--sub)}
+footer p{margin:0 0 6px;max-width:70ch}
+footer a{color:inherit}
+@media(max-width:600px){.ticks span:nth-child(2),.ticks span:nth-child(4),.ticks span:nth-child(6){display:none}}
+@media(max-width:420px){.ticks span:nth-child(3){display:none}}
+@media(max-width:860px){.grid{grid-template-rows:auto}.grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"globe" "time" "info"}#globe{height:min(92vw,460px)}.step.ten{display:none}}
+</style>
+</head>
+<body>
+<div class="sky">
+ <div class="wrap">
+  <header>
+   <h1>じかんの地球儀</h1>
+   <p>年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？</p>
+  </header>
+  <div class="grid">
+   <div id="globe">
+    <svg class="base" role="img" aria-label="回せる地球儀。白い点は世界のできごと、赤い点は日本のできごと"></svg>
+    <canvas aria-hidden="true"></canvas>
+    <svg class="top" aria-hidden="true"></svg>
+    <div class="loading" id="loading">できごとを読みこみ中…</div>
+    <div class="gbtn tl"><button class="chip jp" id="home">日本にもどる</button></div>
+    <div class="gbtn br"><button class="chip" id="zin" aria-label="大きくする">＋</button><button class="chip" id="zout" aria-label="小さくする">－</button></div>
+   </div>
+   <div class="time">
+    <div class="row">
+     <button class="play" id="play" aria-label="時間を進める">▶</button>
+     <button class="step ten" data-s="-10">−10</button>
+     <button class="step" data-s="-1" aria-label="1年もどる">◀</button>
+     <div class="track">
+      <input type="range" id="slider" min="0" max="1000" step="0.5" aria-label="年">
+      <div class="band" id="band"></div>
+      <div class="ticks" id="ticks"></div>
+     </div>
+     <button class="step" data-s="1" aria-label="1年すすむ">▶</button>
+     <button class="step ten" data-s="10">+10</button>
+    </div>
+    <div class="eras" id="eras"></div>
+    <div class="cats" id="cats" role="group" aria-label="出すできごとの種類"></div>
+   </div>
+   <aside class="info" aria-live="polite">
+    <div class="yr" id="yr"></div>
+    <div class="jpera">日本は <b id="era"></b></div>
+    <p class="note" id="winnote"></p>
+    <div id="detail"></div>
+    <h2><span class="mk" style="background:var(--red)"></span>そのころ日本では</h2>
+    <div class="list" id="jplist"></div>
+    <h2 id="wh"><span class="mk" style="background:#fff;border-color:#1b2a52"></span><span id="wtitle">そのころ世界では</span></h2>
+    <div class="list" id="wlist"></div>
+   </aside>
+  </div>
+ </div>
+</div>
+<footer>
+ <p>地球儀は指やマウスで回せます。点や国をタップすると、そこで起きたできごとが出てきます。</p>
+ <p>大きくすると、もっと細かいできごとが出てきます。点が重なっているところは数字の丸になります。タップすると近づきます。</p>
+ <p>できごとは、人が選んだ約130件と、Wikidata から集めたものです。集めたものは人がまだ確かめていないので、年や場所がちがうことがあります。年は代表的な説です（「ごろ」はおよその年）。国の形と国名は、昔のできごとも「いまの国」で表しています。</p>
+ <p id="credits">出典：<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）、説明文は<a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">ウィキペディア日本語版</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。それぞれの記事へのリンクを説明の下に出しています）、国境は <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>（パブリックドメイン）。<span id="gen"></span></p>
+ <p><a href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer">© crossroads inc.</a></p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+{
+// ---- 定数（試作版から） ----
+const JA={'Japan':'日本','China':'中国','South Korea':'韓国','North Korea':'北朝鮮','Mongolia':'モンゴル','Taiwan':'台湾','Russia':'ロシア','India':'インド','Pakistan':'パキスタン','Nepal':'ネパール','Cambodia':'カンボジア','Vietnam':'ベトナム','Thailand':'タイ','Indonesia':'インドネシア','Philippines':'フィリピン','Malaysia':'マレーシア','Myanmar':'ミャンマー','Bangladesh':'バングラデシュ','Sri Lanka':'スリランカ','Australia':'オーストラリア','New Zealand':'ニュージーランド','Iraq':'イラク','Iran':'イラン','Saudi Arabia':'サウジアラビア','Israel':'イスラエル','Palestine':'パレスチナ','Jordan':'ヨルダン','Syria':'シリア','Lebanon':'レバノン','Turkey':'トルコ','Afghanistan':'アフガニスタン','Kazakhstan':'カザフスタン','Uzbekistan':'ウズベキスタン','Egypt':'エジプト','Ethiopia':'エチオピア','Kenya':'ケニア','Tanzania':'タンザニア','South Africa':'南アフリカ','Zimbabwe':'ジンバブエ','Mali':'マリ','Ghana':'ガーナ','Nigeria':'ナイジェリア','Morocco':'モロッコ','Algeria':'アルジェリア','Libya':'リビア','Tunisia':'チュニジア','Sudan':'スーダン','Madagascar':'マダガスカル','Dem. Rep. Congo':'コンゴ民主共和国','Greece':'ギリシャ','Italy':'イタリア','France':'フランス','Germany':'ドイツ','Spain':'スペイン','Portugal':'ポルトガル','United Kingdom':'イギリス','Ireland':'アイルランド','Iceland':'アイスランド','Netherlands':'オランダ','Belgium':'ベルギー','Switzerland':'スイス','Austria':'オーストリア','Poland':'ポーランド','Czechia':'チェコ','Hungary':'ハンガリー','Romania':'ルーマニア','Bulgaria':'ブルガリア','Serbia':'セルビア','Croatia':'クロアチア','Bosnia and Herz.':'ボスニア・ヘルツェゴビナ','Macedonia':'北マケドニア','Ukraine':'ウクライナ','Sweden':'スウェーデン','Norway':'ノルウェー','Finland':'フィンランド','Denmark':'デンマーク','United States of America':'アメリカ','Canada':'カナダ','Mexico':'メキシコ','Guatemala':'グアテマラ','Cuba':'キューバ','Bahamas':'バハマ','Colombia':'コロンビア','Venezuela':'ベネズエラ','Peru':'ペルー','Bolivia':'ボリビア','Chile':'チリ','Brazil':'ブラジル','Argentina':'アルゼンチン','Greenland':'グリーンランド','Antarctica':'南極'};
+const jn=n=>JA[n]||n;
+const ERAS=[[-40000,-14000,'旧石器時代'],[-14000,-400,'縄文時代'],[-400,250,'弥生時代'],[250,592,'古墳時代'],[592,710,'飛鳥時代'],[710,794,'奈良時代'],[794,1185,'平安時代'],[1185,1333,'鎌倉時代'],[1333,1336,'建武の新政'],[1336,1573,'室町時代'],[1573,1603,'安土桃山時代'],[1603,1868,'江戸時代'],[1868,1912,'明治時代'],[1912,1926,'大正時代'],[1926,1989,'昭和時代'],[1989,2019,'平成'],[2019,9999,'令和']];
+const CHIPS=[['縄文',-3000],['弥生',-300],['古墳',300],['飛鳥',600],['奈良',710],['平安',794],['鎌倉',1185],['室町',1338],['戦国',1467],['安土桃山',1573],['江戸',1603],['明治',1868],['大正',1912],['昭和',1926],['平成',1989],['令和',2019]];
+const eraOf=y=>y<-40000?'旧石器時代より前':(ERAS.find(e=>y>=e[0]&&y<e[1])||ERAS[0])[2];
+const BP=[[0,-3500],[150,-500],[300,500],[450,1200],[600,1600],[750,1850],[1000,2026]];
+const lerp=(x,a,b,c,d)=>c+(x-a)/(b-a)*(d-c);
+function p2y(p){for(let i=1;i<BP.length;i++)if(p<=BP[i][0])return lerp(p,BP[i-1][0],BP[i][0],BP[i-1][1],BP[i][1]);return 2026}
+function y2p(y){for(let i=1;i<BP.length;i++)if(y<=BP[i][1])return lerp(y,BP[i-1][1],BP[i][1],BP[i-1][0],BP[i][0]);return 1000}
+const fixY=y=>{y=Math.max(-3500,Math.min(2026,Math.round(y)));return y===0?1:y};
+const yl=y=>y<0?`紀元前${-y}年`:`${y}年`;
+const win=y=>y<-500?250:y<500?100:y<1200?50:y<1600?25:y<1850?15:8;
+const gap=(a,b)=>{let d=a-b;if(a>0&&b<0)d--;if(a<0&&b>0)d++;return d};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// ---- 表示の調整（件数が多すぎ・少なすぎのときはここを直す） ----
+const ZOOM_TIER=[[1.5,2],[2.4,3],[Infinity,4]]; // 拡大率がこれ未満なら、この tier まで出す
+const FEW=150;          // 地球儀に出る点がこれより少なければ、もう1段細かい tier まで出す
+const CELL=18;          // 点をまとめる升目の大きさ（px）
+const LIST_N={jp:3,w:6}; // リストの最初の件数。「もっと見る」で同じ数ずつ増やす
+
+// ---- 状態 ----
+const S={year:1600,country:'Japan',ev:null,rot:[-138,-36,0],zoom:1,cats:new Set(),more:{jp:0,w:0},all:location.hash==='#all'};
+let META=null;
+const E=[],byId=new Map();          // 読みこんだできごと（索引＋チャンク）
+const chunkState=new Map();          // file -> 'loading' | 'done'
+const textCache=new Map();           // file -> Promise<object>
+const TEXT={};                       // id -> {x,xs,w}
+let cand=[],maxTier=2,drawn=[];      // 地球儀に出す候補、いまの tier、描いた点（タップ判定用）
+
+const $=id=>document.getElementById(id);
+const host=$('globe'),svgEl=host.querySelector('svg.base'),svg=d3.select(svgEl),topSvg=d3.select(host.querySelector('svg.top'));
+const cv=host.querySelector('canvas'),ctx=cv.getContext('2d');
+const proj=d3.geoOrthographic().clipAngle(90).precision(.4),path=d3.geoPath(proj);
+svg.html(`<defs><radialGradient id="sea" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#4f97d6"/><stop offset=".7" stop-color="#235e9e"/><stop offset="1" stop-color="#173f73"/></radialGradient><radialGradient id="shine" cx="35%" cy="28%" r="70%"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></radialGradient></defs><circle class="halo" fill="none" stroke="#7fb4ff" stroke-opacity=".25" stroke-width="10"/><circle class="sea" fill="url(#sea)"/><path class="grat"/><g class="lands"></g><circle class="shine" fill="url(#shine)"/>`);
+topSvg.html('<g class="rings"></g><g class="labels"></g>');
+const grat=d3.geoGraticule10();
+let C=[],landSel=null,japan=null;
+
+// ---- できごとの扱い ----
+function add(list){for(const o of list){if(byId.has(o.id))continue;o.i=E.length;o.jp=o.c==='Japan';E.push(o);byId.set(o.id,o)}}
+// 年の幅（y〜ye）があるものは、始まりと終わりの年の近くで出す（長く続くものが時代じゅう出続けないように）
+const hasEnd=e=>e.ye!=null&&e.ye>e.y;
+const nearEnd=(e,y)=>hasEnd(e)&&Math.abs(gap(e.ye,y))<Math.abs(gap(e.y,y));
+function dist(e,y){return Math.abs(gap(nearEnd(e,y)?e.ye:e.y,y))}
+const shownCat=e=>S.cats.has(e.cat);
+const whenOf=e=>esc(yl(e.y))+(e.a?'ごろ':'')+(hasEnd(e)?'〜'+esc(yl(e.ye))+(e.a?'ごろ':''):'');
+
+// tier 3〜4 のチャンクを読む（読みこみ済みは使い回す）
+function needChunks(lo,hi){
+ if(!META)return;
+ for(const c of META.chunks){
+  if(c.to<lo||c.from>hi||chunkState.has(c.file))continue;
+  chunkState.set(c.file,'loading');
+  fetch('data/'+c.file).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(list=>{add(list);chunkState.set(c.file,'done');update()})
+   .catch(()=>chunkState.delete(c.file));
+ }
+}
+// 説明文はタップされたときに読む
+function needText(e){
+ if(!META||e.id in TEXT)return;
+ const f=META.text.find(c=>e.y>=c.from&&e.y<=c.to);if(!f){TEXT[e.id]=null;return}
+ if(!textCache.has(f.file))textCache.set(f.file,fetch('data/'+f.file).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(o=>{Object.assign(TEXT,o);return o}).catch(()=>{textCache.delete(f.file);return null}));
+ textCache.get(f.file).then(o=>{if(o&&!(e.id in TEXT))TEXT[e.id]=null;if(S.ev===e.i)update()});
+}
+
+// ---- 地球儀 ----
+function size(){
+ const W=host.clientWidth,H=host.clientHeight,dpr=Math.min(2,devicePixelRatio||1);
+ cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+ proj.translate([W/2,H/2]).scale(Math.min(W,H)/2*.9*S.zoom);draw();
+}
+function visible(lo,la){return d3.geoDistance([lo,la],[-S.rot[0],-S.rot[1]])<Math.PI/2-.02}
+function draw(){
+ if(!landSel)return;
+ proj.rotate(S.rot);const [cx,cy]=proj.translate(),r=proj.scale();
+ svg.selectAll('circle.sea,circle.shine').attr('cx',cx).attr('cy',cy).attr('r',r);
+ svg.select('circle.halo').attr('cx',cx).attr('cy',cy).attr('r',r+5);
+ svg.select('path.grat').attr('d',path(grat));
+ landSel.attr('d',path).attr('class',d=>'land'+(d.properties.n==='Japan'?' jp':'')+(d.properties.n===S.country?' sel':''));
+
+ const W=host.clientWidth,H=host.clientHeight,w=win(S.year),k=Math.min(1.6,Math.max(.8,r/260));
+ ctx.clearRect(0,0,W,H);
+ // 升目ごとにまとめる。重要なもの（tier が小さい・年が近い）をその升目の代表にする
+ const cells=new Map(),sel=S.ev!=null?E[S.ev]:null;
+ for(const e of cand){
+  if(e===sel||!visible(e.lo,e.la))continue;
+  const [x,y]=proj([e.lo,e.la]);if(x<-20||y<-20||x>W+20||y>H+20)continue;
+  const key=Math.floor(x/CELL)+','+Math.floor(y/CELL);let g=cells.get(key);
+  if(!g){g={x:0,y:0,n:0,lead:e,jp:false,list:[]};cells.set(key,g)}
+  g.x+=x;g.y+=y;g.n++;g.list.push(e);if(e.jp)g.jp=true;
+  if(e.tr<g.lead.tr||(e.tr===g.lead.tr&&e._d<g.lead._d))g.lead=e;
+ }
+ drawn=[];
+ const groups=[...cells.values()].sort((a,b)=>b.lead._d-a.lead._d);
+ for(const g of groups){
+  if(g.n===1){const e=g.lead,[x,y]=proj([e.lo,e.la]),near=1-Math.min(1,e._d/w),rr=(3.2+3*near+(e.tr===1?1.5:0))*k;
+   dot(x,y,rr,e.jp,.55+.45*near);drawn.push({x,y,r:rr,e});continue}
+  const x=g.x/g.n,y=g.y/g.n,rr=(8+Math.min(10,Math.log2(g.n)*2.2))*k;
+  ctx.globalAlpha=.92;ctx.beginPath();ctx.arc(x,y,rr,0,7);ctx.fillStyle=g.jp?'#e5473b':'#ffffff';ctx.fill();
+  ctx.lineWidth=1.5;ctx.strokeStyle=g.jp?'#ffffff':'#1b2a52';ctx.stroke();ctx.globalAlpha=1;
+  ctx.fillStyle=g.jp?'#ffffff':'#1b2a52';ctx.font=`800 ${Math.round(11*k)}px "M PLUS Rounded 1c",sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(g.n>999?'999+':g.n,x,y+.5);drawn.push({x,y,r:rr,g});
+ }
+ let ring='',lab='';
+ if(sel&&visible(sel.lo,sel.la)){const [x,y]=proj([sel.lo,sel.la]),rr=9*k;dot(x,y,rr,sel.jp,1);drawn.push({x,y,r:rr,e:sel});
+  ring=`<circle class="ring" cx="${x}" cy="${y}" r="${rr+4}"/>`;
+  if(!sel.jp)lab+=`<text class="glabel" x="${x+14}" y="${y+5}">${esc(sel.t.length>14?sel.t.slice(0,13)+'…':sel.t)}</text>`}
+ if(japan&&visible(138,37)){const[x,y]=proj([141.5,39.5]);lab=`<text class="glabel" x="${x+8}" y="${y}">日本</text>`+lab}
+ topSvg.select('g.rings').html(ring);topSvg.select('g.labels').html(lab);
+}
+function dot(x,y,rr,jp,op){ctx.globalAlpha=op;ctx.beginPath();ctx.arc(x,y,rr,0,7);ctx.fillStyle=jp?'#e5473b':'#ffffff';ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle=jp?'#ffffff':'#1b2a52';ctx.stroke();ctx.globalAlpha=1}
+
+let fly=null;
+function flyTo(lo,la,z){cancelAnimationFrame(fly);const a=S.rot.slice();let tx=-lo;while(tx-a[0]>180)tx-=360;while(tx-a[0]<-180)tx+=360;const b=[tx,Math.max(-70,Math.min(70,-la)),0],it=d3.interpolate(a,b),z0=S.zoom,z1=z??S.zoom,t0=performance.now(),dur=matchMedia('(prefers-reduced-motion:reduce)').matches?1:850;
+ const step=t=>{const u=Math.min(1,(t-t0)/dur),q=d3.easeCubicInOut(u);S.rot=it(q);if(z1!==z0){S.zoom=z0+(z1-z0)*q;size()}else draw();if(u<1)fly=requestAnimationFrame(step);else if(z1!==z0)update()};fly=requestAnimationFrame(step)}
+let drag=null;
+const local=ev=>{const b=host.getBoundingClientRect();return[ev.clientX-b.left,ev.clientY-b.top]};
+host.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))return;cancelAnimationFrame(fly);drag={x:ev.clientX,y:ev.clientY,r:S.rot.slice(),moved:false,p:local(ev)};host.classList.add('grabbing');try{host.setPointerCapture(ev.pointerId)}catch(_){}});
+host.addEventListener('pointermove',ev=>{if(!drag)return;const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.hypot(dx,dy)>5)drag.moved=true;if(!drag.moved)return;const k=57.3/proj.scale();S.rot=[drag.r[0]+dx*k,Math.max(-85,Math.min(85,drag.r[1]-dy*k)),0];draw()});
+const endDrag=()=>{host.classList.remove('grabbing');if(drag&&!drag.moved)tap(drag.p);drag=null};
+host.addEventListener('pointerup',endDrag);host.addEventListener('pointercancel',()=>{host.classList.remove('grabbing');drag=null});
+host.addEventListener('wheel',ev=>{ev.preventDefault();zoom(Math.exp(-ev.deltaY*.0015))},{passive:false});
+let zt=null;
+function zoom(f){S.zoom=Math.max(1,Math.min(4,S.zoom*f));size();clearTimeout(zt);zt=setTimeout(update,120)}
+$('zin').onclick=()=>zoom(1.4);$('zout').onclick=()=>zoom(1/1.4);
+// タップ：いちばん近い点 → まとまりなら近づく → どれでもなければ国
+function tap([x,y]){
+ let best=null,bd=Infinity;
+ for(const d of drawn){const dd=Math.hypot(d.x-x,d.y-y)-d.r;if(dd<Math.max(10,d.r*.5)&&dd<bd){bd=dd;best=d}}
+ if(best&&best.e){pickEvent(best.e.i,false);return}
+ if(best&&best.g){const g=best.g,c=d3.geoCentroid({type:'MultiPoint',coordinates:g.list.map(e=>[e.lo,e.la])});
+  if(S.zoom<3.9){flyTo(c[0],c[1],Math.min(4,S.zoom*1.8));return}
+  pickEvent(g.lead.i,false);return}
+ const [cx,cy]=proj.translate();
+ if(Math.hypot(x-cx,y-cy)<=proj.scale()){const ll=proj.invert([x,y]),f=ll&&C.find(f=>d3.geoContains(f,ll));
+  if(f){S.country=f.properties.n;S.ev=null;resetMore();update();return}}
+ S.country=null;S.ev=null;resetMore();update();
+}
+function pickEvent(i,move){S.ev=i;S.country=E[i].c||null;needText(E[i]);if(move)flyTo(E[i].lo,E[i].la);update()}
+$('home').onclick=()=>{S.country='Japan';S.ev=null;resetMore();flyTo(138,36);update()};
+
+// ---- 年のつまみ ----
+const slider=$('slider');
+function setYear(y,fromSlider){S.year=fixY(y);S.ev=null;resetMore();if(!fromSlider)slider.value=y2p(S.year);update()}
+slider.addEventListener('input',()=>setYear(p2y(+slider.value),true));
+document.querySelectorAll('.step').forEach(b=>b.onclick=()=>{stop();let y=S.year+(+b.dataset.s);if(S.year>0&&y<=0)y--;if(S.year<0&&y>=0)y++;setYear(y)});
+let timer=null;const playB=$('play');
+function stop(){clearInterval(timer);timer=null;playB.textContent='▶';playB.setAttribute('aria-label','時間を進める')}
+playB.onclick=()=>{if(timer){stop();return}if(+slider.value>=999)slider.value=0;playB.textContent='❚❚';playB.setAttribute('aria-label','止める');timer=setInterval(()=>{const p=Math.min(1000,+slider.value+.7);slider.value=p;setYear(p2y(p),true);if(p>=1000)stop()},60)};
+$('ticks').innerHTML=BP.map(b=>`<span style="left:${b[0]/10}%">${b[1]<0?'前'+(-b[1]):b[1]}</span>`).join('');
+$('band').innerHTML=ERAS.filter(e=>e[1]>-3500).map(e=>{const a=y2p(Math.max(-3500,e[0])),b=y2p(Math.min(2026,e[1]));return`<i data-e="${esc(e[2])}" style="left:${a/10}%;width:${(b-a)/10}%"></i>`}).join('');
+$('eras').innerHTML=CHIPS.map(c=>`<button data-y="${c[1]}">${c[0]}</button>`).join('');
+$('eras').addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){stop();setYear(+b.dataset.y)}});
+
+// ---- カテゴリの絞り込み ----
+function renderCats(){
+ $('cats').innerHTML='<span>出すもの</span>'+Object.entries(META.categories).map(([k,v])=>`<button data-c="${esc(k)}" aria-pressed="${S.cats.has(k)}">${esc(v.label)}</button>`).join('');
+}
+$('cats').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;const c=b.dataset.c;S.cats.has(c)?S.cats.delete(c):S.cats.add(c);b.setAttribute('aria-pressed',S.cats.has(c));
+ if(S.ev!=null&&!S.cats.has(E[S.ev].cat))S.ev=null;resetMore();update()});
+
+// ---- 右のパネル ----
+function resetMore(){S.more.jp=0;S.more.w=0}
+function card(e,opt={}){const end=nearEnd(e,S.year),d=gap(end?e.ye:e.y,S.year),rel=(d===0?'この年':d<0?`${-d}年前`:`${d}年後`)+(hasEnd(e)?(end?'に終わり':'に始まり'):'');
+ let body='';
+ if(opt.d){const t=TEXT[e.id];
+  body=t===undefined?'<p class="empty">説明を読みこみ中…</p>':t&&t.x?`<p>${esc(t.x)}</p>`:'';
+  if(t&&t.w)body+=`<span class="src">${t.xs==='human'?'くわしく：':'出典：'}<a href="${esc(t.w)}" target="_blank" rel="noopener noreferrer">ウィキペディア「${esc(decodeTitle(t.w))}」</a>${t.xs==='wikipedia'||t.xs==='ai-draft'?'（CC BY-SA 4.0）':''}</span>`;
+  else if(e.src!=='seed'&&e.id.startsWith('Q'))body+=`<span class="src">出典：<a href="https://www.wikidata.org/wiki/${esc(e.id)}" target="_blank" rel="noopener noreferrer">Wikidata ${esc(e.id)}</a></span>`}
+ return`<button class="ev${e.i===S.ev?' on':''}" data-i="${e.i}"><span class="when">${whenOf(e)}・${rel}</span><b>${esc(e.t)}</b><span class="pl">${esc(e.p||jn(e.c))}</span>${body}${!e.jp?`<span class="tag">日本は${esc(eraOf(end?e.ye:e.y))}</span>`:''}${e.j==='link'&&!e.jp?'<span class="tag link">日本とつながり</span>':''}${S.all&&!e.rv?'<span class="tag un">未確認</span>':''}</button>`}
+function decodeTitle(u){try{return decodeURIComponent(u.split('/wiki/')[1]||'').replace(/_/g,' ')}catch(_){return'記事'}}
+const near=(list,n)=>list.slice().sort((a,b)=>dist(a,S.year)-dist(b,S.year)).slice(0,n);
+const rank=list=>list.sort((a,b)=>a.tr-b.tr||a._d-b._d);
+function listHTML(items,key,opt){const n=LIST_N[key]*(1+S.more[key]),shown=items.slice(0,n),rest=items.length-shown.length;
+ return shown.map(e=>card(e,opt(e))).join('')+(rest>0?`<button class="more" data-more="${key}">もっと見る（あと${rest}件）</button>`:'')}
+
+function update(){
+ if(!META)return;
+ const y=S.year,w=win(y),era=eraOf(y);
+ for(const e of E)e._d=dist(e,y);
+ const inw=e=>e._d<=w;
+ // 拡大率から tier を決め、点が少なすぎればもう1段細かく
+ maxTier=ZOOM_TIER.find(z=>S.zoom<z[0])[1];
+ const pool=E.filter(e=>inw(e)&&shownCat(e));
+ const count=t=>pool.reduce((n,e)=>n+(e.tr<=t),0);
+ while(maxTier<4&&count(maxTier)<FEW)maxTier++;
+ if(maxTier>=3||(S.country&&S.country!=='Japan'))needChunks(y-w,y+w);
+ cand=pool.filter(e=>e.tr<=maxTier);
+
+ $('yr').textContent=yl(y);$('era').textContent=era;
+ $('winnote').textContent=`前後${w}年のできごとを表示中（${cand.length.toLocaleString()}件）`;
+ document.querySelectorAll('#band i').forEach(i=>i.classList.toggle('on',i.dataset.e===era));
+ const cur=CHIPS.filter(c=>c[1]<=y).pop();
+ document.querySelectorAll('#eras button').forEach(b=>b.classList.toggle('on',!!cur&&+b.dataset.y===cur[1]));
+
+ const isSel=e=>({d:e.i===S.ev});
+ const J=E.filter(e=>e.jp&&shownCat(e)),jw=rank(cand.filter(e=>e.jp));
+ $('jplist').innerHTML=jw.length?listHTML(jw,'jp',isSel):`<p class="empty">このころの日本のできごとは、まだ入っていません。いちばん近いのは…</p>`+near(J,1).map(e=>card(e,isSel(e))).join('');
+ let title,list,empty;
+ if(S.country&&S.country!=='Japan'){const inC=E.filter(e=>e.c===S.country&&shownCat(e));title=`${jn(S.country)}では`;list=rank(inC.filter(inw));
+  empty=inC.length?`<p class="empty">このころの${esc(jn(S.country))}のできごとは、まだ入っていません。近い時代では…</p>`+near(inC,2).map(e=>card(e,isSel(e))).join(''):`<p class="empty">${esc(jn(S.country))}のできごとは、まだ入っていません。</p>`}
+ else{title='そのころ世界では';const Wd=E.filter(e=>!e.jp&&shownCat(e));list=rank(cand.filter(e=>!e.jp));empty=`<p class="empty">この時代のできごとは、まだ少ないです。近い時代では…</p>`+near(Wd,2).map(e=>card(e,isSel(e))).join('')}
+ $('wtitle').textContent=title;
+ $('wlist').innerHTML=list.length?listHTML(list,'w',isSel):empty;
+ const shown=S.ev!=null&&document.querySelector(`.info .list .ev[data-i="${S.ev}"]`);
+ $('detail').innerHTML=S.ev!=null&&!shown?`<h2>えらんだできごと</h2>`+card(E[S.ev],{d:1}):'';
+ draw();
+}
+document.querySelector('.info').addEventListener('click',ev=>{
+ const m=ev.target.closest('.more');if(m){S.more[m.dataset.more]++;update();return}
+ if(ev.target.closest('a'))return;
+ const b=ev.target.closest('.ev');if(b)pickEvent(+b.dataset.i,true)});
+document.addEventListener('keydown',ev=>{if(ev.target===slider||ev.target.tagName==='BUTTON'||ev.target.tagName==='A')return;if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){stop();const s=ev.key==='ArrowRight'?1:-1;let y=S.year+s;if(S.year>0&&y<=0)y--;if(S.year<0&&y>=0)y++;setYear(y)}});
+addEventListener('hashchange',()=>{S.all=location.hash==='#all';update()});
+
+// ---- 起動 ----
+const getJSON=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u+' '+r.status);return r.json()});
+Promise.all([getJSON('countries.json'),getJSON('data/meta.json'),getJSON('data/index-tier12.json')]).then(([raw,meta,index])=>{
+ META=meta;
+ for(const [k,v] of Object.entries(meta.categories))if(!v.hidden)S.cats.add(k);
+ renderCats();
+ if(meta.generated_at)$('gen').textContent=` データの作成日：${meta.generated_at.slice(0,10)}。`;
+ C=raw.map(o=>({type:'Feature',properties:{n:o.n},geometry:o.g}));
+ japan=C.find(f=>f.properties.n==='Japan');
+ add(index);
+ landSel=svg.select('g.lands').selectAll('path').data(C).join('path');
+ $('loading').remove();
+ new ResizeObserver(size).observe(host);
+ setYear(1600);
+ const first=E.find(e=>e.y===1600&&e.jp&&e.src==='seed')||E.find(e=>e.y===1600&&e.jp);
+ if(first)pickEvent(first.i,false);
+}).catch(err=>{console.error(err);$('loading').textContent='データを読みこめませんでした。ページを開き直してください。';
+ $('wlist').innerHTML='<p class="empty">データを読みこめませんでした。ファイルを直接開いたときは、ローカルのサーバー（例：npx serve app）から開いてください。</p>'});
+}
+</script>
+</body>
+</html>

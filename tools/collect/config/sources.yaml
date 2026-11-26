@@ -1,0 +1,162 @@
+# 取得するカテゴリとWikidataのクラス
+# QIDは wbgetentities でラベルを照合済み（verified に照合日を書く）。
+# 照合していない候補は verified を空にし、使う前に確認すること。
+
+client:
+  # Wikimediaの方針により User-Agent は必須。連絡先はここで変える
+  user_agent: "jikan-no-chikyugi/0.1 (https://crssrds.jp/)"
+  # 詳細（QIDを指定して取る軽いクエリ）は Wikidata 公式の WDQS
+  sparql_endpoint: "https://query.wikidata.org/sparql"
+  # 一覧（クラスで全件を探す重いクエリ）は QLever。WDQSでは建物などが60秒を超えるため（2026-11-26 判断）
+  # 大学の公開サービスでSLAはなく、データは数日〜数週間前の写し。
+  # WDQSに戻すときは engine: wdqs、endpoint を上の sparql_endpoint にする
+  list_sparql:
+    engine: qlever
+    endpoint: "https://qlever.cs.uni-freiburg.de/api/wikidata"
+  wikipedia_summary: "https://ja.wikipedia.org/api/rest_v1/page/summary/"
+  concurrency: 1          # 同時実行数（1〜2）
+  max_retries: 5          # 429/503 の再試行回数（Retry-After と指数バックオフ）
+  wikipedia_rps: 3        # Wikipedia への毎秒リクエスト数の上限
+  wikipedia_concurrency: 3  # Wikipedia への同時接続数（応答待ちが長いため）
+
+# 時代の分割（クエリのタイムアウト対策）。from 以上 to 未満を step 年ごとに取る
+# 年は 0年のない暦年（紀元前は負の数）
+periods:
+  - { from: -3500, to: 1500, step: 500 }
+  - { from: 1500, to: 1800, step: 100 }
+  - { from: 1800, to: 2030, step: 10 }
+
+# 国の絞り込み。空にすると全世界
+# （フェーズ1前半は日本・中国・台湾・韓国・北朝鮮・モンゴルに絞っていた。2026-11-26 に全世界へ）
+scope:
+  countries: []
+
+# 「日本」とみなす主体。P710（参加者）にこれらを含むできごとは japan: link の候補にする
+# （自動判定は候補止まり。レビューで確定する）
+japan_entities:
+  - { qid: Q17, label: 日本, verified: 2026-11-26 }
+  - { qid: Q188712, label: 大日本帝国, verified: 2026-11-26 }
+  - { qid: Q276535, label: 大日本帝国陸軍, verified: 2026-11-26 }
+  - { qid: Q219712, label: 大日本帝国海軍, verified: 2026-11-26 }
+  - { qid: Q736839, label: 鎌倉幕府, verified: 2026-11-26 }
+  - { qid: Q1154406, label: 室町幕府, verified: 2026-11-26 }
+  - { qid: Q11634225, label: 豊臣政権, verified: 2026-11-26 }
+  - { qid: Q205662, label: 江戸幕府, verified: 2026-11-26 }
+  - { qid: Q275488, label: 自衛隊, verified: 2026-11-26 }
+  - { qid: Q1378053, label: 倭, verified: 2026-11-26 }
+  - { qid: Q2658252, label: ヤマト王権, verified: 2026-11-26 }
+  - { qid: Q6139796, label: 日本軍, verified: 2026-11-26 }
+
+categories:
+  war:
+    label: 戦い・戦争
+    enabled: true
+    # 日付は P585（時点）→ P580（開始）の順。終わりは P582
+    date_props: [P585, P580]
+    end_props: [P582]
+    classes:
+      - { qid: Q178561, label: 戦闘, verified: 2026-11-26 }
+      - { qid: Q198, label: 戦争, verified: 2026-11-26 }
+    subclasses: true      # P279* で下位クラスもたどる
+
+  building:
+    label: 建物・遺跡
+    enabled: true
+    date_props: [P571]
+    end_props: [P576]
+    classes:
+      - { qid: Q24398318, label: 宗教建築物, verified: 2026-11-26 }
+      - { qid: Q5393308, label: 仏教寺院, verified: 2026-11-26 }
+      - { qid: Q845945, label: 神社, verified: 2026-11-26 }
+      - { qid: Q44539, label: 神殿, verified: 2026-11-26 }
+      - { qid: Q16970, label: 教会堂, verified: 2026-11-26 }
+      - { qid: Q32815, label: モスク, verified: 2026-11-26 }
+      - { qid: Q199451, label: パゴダ, verified: 2026-11-26 }
+      - { qid: Q23413, label: 城, verified: 2026-11-26 }
+      - { qid: Q92026, label: 日本の城, verified: 2026-11-26 }
+      - { qid: Q57821, label: 築城, verified: 2026-11-26 }
+      - { qid: Q16560, label: 宮殿, verified: 2026-11-26 }
+      - { qid: Q12280, label: 橋, verified: 2026-11-26 }
+      - { qid: Q12518, label: 塔, verified: 2026-11-26 }
+      - { qid: Q839954, label: 遺跡, verified: 2026-11-26 }
+    subclasses: true
+    # 上のクラスに当たらなくても、世界遺産（P1435 = Q9259）なら取る
+    heritage:
+      - { qid: Q9259, label: 世界遺産, verified: 2026-11-26 }
+
+  # --- フェーズ1後半で追加（QIDは 2026-11-26 に wbgetentities で再照合） ---
+  # 日本語ラベルのないものは一覧の段階で外す（fetch.js の itemFilter）。
+  # min_sitelinks を書くと、sitelink数がそれ未満のものも一覧の段階で外す
+  politics:
+    label: 国・政治
+    enabled: true
+    date_props: [P585, P580, P571]
+    end_props: [P582, P576]
+    classes:
+      - { qid: Q131569, label: 条約, verified: 2026-11-26 }
+      - { qid: Q10931, label: 革命, verified: 2026-11-26 }
+      - { qid: Q45382, label: クーデター, verified: 2026-11-26 }
+      - { qid: Q1464916, label: 独立宣言, verified: 2026-11-26 }
+      - { qid: Q3024240, label: かつて存在した国家, verified: 2026-11-26 }
+    subclasses: true
+
+  city:
+    label: 町の始まり
+    enabled: true
+    date_props: [P571]
+    end_props: [P576]
+    classes:
+      - { qid: Q515, label: 都市, verified: 2026-11-26 }
+    subclasses: true
+    # 近代の市制施行（日本の「市」など）が大量に入るのを抑える仮の下限
+    min_sitelinks: 20
+
+  disaster:
+    label: 災害
+    enabled: true
+    date_props: [P585, P580]
+    end_props: [P582]
+    classes:
+      - { qid: Q7944, label: 地震, verified: 2026-11-26 }
+      - { qid: Q7692360, label: 噴火, verified: 2026-11-26 }
+      - { qid: Q8070, label: 津波, verified: 2026-11-26 }
+      - { qid: Q8092, label: 熱帯低気圧, verified: 2026-11-26 }
+      - { qid: Q12184, label: パンデミック, verified: 2026-11-26 }
+      - { qid: Q8068, label: 洪水, verified: 2026-11-26 }
+      - { qid: Q168983, label: 大火, verified: 2026-11-26 }
+    subclasses: true
+
+  sports_culture:
+    label: スポーツ・文化
+    enabled: true
+    date_props: [P585, P580]
+    end_props: [P582]
+    classes:
+      - { qid: Q159821, label: 夏季オリンピック, verified: 2026-11-26 }
+      - { qid: Q82414, label: 冬季オリンピック, verified: 2026-11-26 }
+      - { qid: Q172754, label: 国際博覧会, verified: 2026-11-26 }
+    subclasses: true
+
+  science:
+    label: 発明・発見・探検
+    enabled: true
+    # P619（打ち上げ日）：アポロ11号などは P585/P580 を持たない
+    date_props: [P585, P580, P619]
+    end_props: [P582]
+    classes:
+      - { qid: Q2133344, label: 宇宙探査ミッション, verified: 2026-11-26 }
+      - { qid: Q752783, label: 有人宇宙飛行, verified: 2026-11-26 }
+      - { qid: Q2401485, label: 遠征, verified: 2026-11-26 }
+    subclasses: true
+
+  people:
+    label: 人物（誕生）
+    enabled: true
+    hidden_by_default: true   # 決定事項1：別カテゴリにして、アプリでは初期非表示
+    date_props: [P569]
+    end_props: []
+    place_props: [P19]        # 出生地の座標を使う
+    min_sitelinks: 30         # 数が多いのでしきい値を高めにする（仮の値）
+    classes:
+      - { qid: Q5, label: ヒト, verified: 2026-11-26 }
+    subclasses: false

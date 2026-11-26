@@ -1,0 +1,618 @@
+{
+ "generated_at": "2026-11-26T22:02:41.885Z",
+ "count": 61382,
+ "by_tier": {
+  "1": 695,
+  "2": 4900,
+  "3": 28550,
+  "4": 27237
+ },
+ "by_category": {
+  "disaster": 1597,
+  "building": 11454,
+  "politics": 2877,
+  "city": 3922,
+  "people": 35574,
+  "science": 272,
+  "war": 5558,
+  "sports_culture": 128
+ },
+ "text_sources": {
+  "wikipedia": 48201,
+  "wikidata": 1784,
+  "human": 135
+ },
+ "years": {
+  "min": -5330001,
+  "max": 2026
+ },
+ "index": {
+  "file": "index-tier12.json",
+  "count": 5595,
+  "gz": 208571
+ },
+ "chunks": [
+  {
+   "file": "chunks/-5330001_504.json",
+   "from": -5330001,
+   "to": 504,
+   "count": 1468,
+   "gz": 46377
+  },
+  {
+   "file": "chunks/505_853.json",
+   "from": 505,
+   "to": 853,
+   "count": 1444,
+   "gz": 48402
+  },
+  {
+   "file": "chunks/854_1112.json",
+   "from": 854,
+   "to": 1112,
+   "count": 1470,
+   "gz": 53369
+  },
+  {
+   "file": "chunks/1113_1243.json",
+   "from": 1113,
+   "to": 1243,
+   "count": 1481,
+   "gz": 55035
+  },
+  {
+   "file": "chunks/1244_1363.json",
+   "from": 1244,
+   "to": 1363,
+   "count": 1477,
+   "gz": 54366
+  },
+  {
+   "file": "chunks/1364_1478.json",
+   "from": 1364,
+   "to": 1478,
+   "count": 1444,
+   "gz": 53162
+  },
+  {
+   "file": "chunks/1479_1560.json",
+   "from": 1479,
+   "to": 1560,
+   "count": 1453,
+   "gz": 54143
+  },
+  {
+   "file": "chunks/1561_1614.json",
+   "from": 1561,
+   "to": 1614,
+   "count": 1454,
+   "gz": 51481
+  },
+  {
+   "file": "chunks/1615_1676.json",
+   "from": 1615,
+   "to": 1676,
+   "count": 1468,
+   "gz": 52980
+  },
+  {
+   "file": "chunks/1677_1746.json",
+   "from": 1677,
+   "to": 1746,
+   "count": 1416,
+   "gz": 54069
+  },
+  {
+   "file": "chunks/1747_1786.json",
+   "from": 1747,
+   "to": 1786,
+   "count": 1384,
+   "gz": 52349
+  },
+  {
+   "file": "chunks/1787_1814.json",
+   "from": 1787,
+   "to": 1814,
+   "count": 1430,
+   "gz": 53545
+  },
+  {
+   "file": "chunks/1815_1843.json",
+   "from": 1815,
+   "to": 1843,
+   "count": 1423,
+   "gz": 54181
+  },
+  {
+   "file": "chunks/1844_1862.json",
+   "from": 1844,
+   "to": 1862,
+   "count": 1481,
+   "gz": 56438
+  },
+  {
+   "file": "chunks/1863_1875.json",
+   "from": 1863,
+   "to": 1875,
+   "count": 1422,
+   "gz": 54112
+  },
+  {
+   "file": "chunks/1876_1887.json",
+   "from": 1876,
+   "to": 1887,
+   "count": 1421,
+   "gz": 54375
+  },
+  {
+   "file": "chunks/1888_1898.json",
+   "from": 1888,
+   "to": 1898,
+   "count": 1503,
+   "gz": 56607
+  },
+  {
+   "file": "chunks/1899_1908.json",
+   "from": 1899,
+   "to": 1908,
+   "count": 1507,
+   "gz": 57447
+  },
+  {
+   "file": "chunks/1909_1917.json",
+   "from": 1909,
+   "to": 1917,
+   "count": 1579,
+   "gz": 60491
+  },
+  {
+   "file": "chunks/1918_1924.json",
+   "from": 1918,
+   "to": 1924,
+   "count": 1401,
+   "gz": 52850
+  },
+  {
+   "file": "chunks/1925_1930.json",
+   "from": 1925,
+   "to": 1930,
+   "count": 1380,
+   "gz": 51985
+  },
+  {
+   "file": "chunks/1931_1937.json",
+   "from": 1931,
+   "to": 1937,
+   "count": 1635,
+   "gz": 61853
+  },
+  {
+   "file": "chunks/1938_1942.json",
+   "from": 1938,
+   "to": 1942,
+   "count": 1483,
+   "gz": 56517
+  },
+  {
+   "file": "chunks/1943_1947.json",
+   "from": 1943,
+   "to": 1947,
+   "count": 1699,
+   "gz": 63371
+  },
+  {
+   "file": "chunks/1948_1952.json",
+   "from": 1948,
+   "to": 1952,
+   "count": 1527,
+   "gz": 58025
+  },
+  {
+   "file": "chunks/1953_1957.json",
+   "from": 1953,
+   "to": 1957,
+   "count": 1459,
+   "gz": 55793
+  },
+  {
+   "file": "chunks/1958_1962.json",
+   "from": 1958,
+   "to": 1962,
+   "count": 1532,
+   "gz": 58429
+  },
+  {
+   "file": "chunks/1963_1967.json",
+   "from": 1963,
+   "to": 1967,
+   "count": 1688,
+   "gz": 64420
+  },
+  {
+   "file": "chunks/1968_1971.json",
+   "from": 1968,
+   "to": 1971,
+   "count": 1449,
+   "gz": 54776
+  },
+  {
+   "file": "chunks/1972_1975.json",
+   "from": 1972,
+   "to": 1975,
+   "count": 1461,
+   "gz": 55559
+  },
+  {
+   "file": "chunks/1976_1979.json",
+   "from": 1976,
+   "to": 1979,
+   "count": 1520,
+   "gz": 57211
+  },
+  {
+   "file": "chunks/1980_1983.json",
+   "from": 1980,
+   "to": 1983,
+   "count": 1623,
+   "gz": 61962
+  },
+  {
+   "file": "chunks/1984_1986.json",
+   "from": 1984,
+   "to": 1986,
+   "count": 1357,
+   "gz": 51635
+  },
+  {
+   "file": "chunks/1987_1989.json",
+   "from": 1987,
+   "to": 1989,
+   "count": 1351,
+   "gz": 51801
+  },
+  {
+   "file": "chunks/1990_1993.json",
+   "from": 1990,
+   "to": 1993,
+   "count": 1604,
+   "gz": 61861
+  },
+  {
+   "file": "chunks/1994_1998.json",
+   "from": 1994,
+   "to": 1998,
+   "count": 1554,
+   "gz": 61301
+  },
+  {
+   "file": "chunks/1999_2011.json",
+   "from": 1999,
+   "to": 2011,
+   "count": 1437,
+   "gz": 57934
+  },
+  {
+   "file": "chunks/2012_2026.json",
+   "from": 2012,
+   "to": 2026,
+   "count": 902,
+   "gz": 33356
+  }
+ ],
+ "text": [
+  {
+   "file": "text/-5330001_119.json",
+   "from": -5330001,
+   "to": 119,
+   "count": 1329,
+   "gz": 111349
+  },
+  {
+   "file": "text/120_708.json",
+   "from": 120,
+   "to": 708,
+   "count": 1354,
+   "gz": 111696
+  },
+  {
+   "file": "text/709_984.json",
+   "from": 709,
+   "to": 984,
+   "count": 1361,
+   "gz": 115788
+  },
+  {
+   "file": "text/985_1197.json",
+   "from": 985,
+   "to": 1197,
+   "count": 1325,
+   "gz": 122963
+  },
+  {
+   "file": "text/1198_1335.json",
+   "from": 1198,
+   "to": 1335,
+   "count": 1338,
+   "gz": 119884
+  },
+  {
+   "file": "text/1336_1469.json",
+   "from": 1336,
+   "to": 1469,
+   "count": 1347,
+   "gz": 120405
+  },
+  {
+   "file": "text/1470_1557.json",
+   "from": 1470,
+   "to": 1557,
+   "count": 1349,
+   "gz": 122165
+  },
+  {
+   "file": "text/1558_1611.json",
+   "from": 1558,
+   "to": 1611,
+   "count": 1389,
+   "gz": 116669
+  },
+  {
+   "file": "text/1612_1677.json",
+   "from": 1612,
+   "to": 1677,
+   "count": 1356,
+   "gz": 114370
+  },
+  {
+   "file": "text/1678_1747.json",
+   "from": 1678,
+   "to": 1747,
+   "count": 1298,
+   "gz": 121059
+  },
+  {
+   "file": "text/1748_1788.json",
+   "from": 1748,
+   "to": 1788,
+   "count": 1273,
+   "gz": 117839
+  },
+  {
+   "file": "text/1789_1821.json",
+   "from": 1789,
+   "to": 1821,
+   "count": 1316,
+   "gz": 119888
+  },
+  {
+   "file": "text/1822_1849.json",
+   "from": 1822,
+   "to": 1849,
+   "count": 1299,
+   "gz": 121100
+  },
+  {
+   "file": "text/1850_1865.json",
+   "from": 1850,
+   "to": 1865,
+   "count": 1308,
+   "gz": 120045
+  },
+  {
+   "file": "text/1866_1880.json",
+   "from": 1866,
+   "to": 1880,
+   "count": 1383,
+   "gz": 128490
+  },
+  {
+   "file": "text/1881_1892.json",
+   "from": 1881,
+   "to": 1892,
+   "count": 1393,
+   "gz": 125726
+  },
+  {
+   "file": "text/1893_1903.json",
+   "from": 1893,
+   "to": 1903,
+   "count": 1350,
+   "gz": 123590
+  },
+  {
+   "file": "text/1904_1913.json",
+   "from": 1904,
+   "to": 1913,
+   "count": 1376,
+   "gz": 124180
+  },
+  {
+   "file": "text/1914_1922.json",
+   "from": 1914,
+   "to": 1922,
+   "count": 1465,
+   "gz": 128492
+  },
+  {
+   "file": "text/1923_1929.json",
+   "from": 1923,
+   "to": 1929,
+   "count": 1344,
+   "gz": 111059
+  },
+  {
+   "file": "text/1930_1936.json",
+   "from": 1930,
+   "to": 1936,
+   "count": 1420,
+   "gz": 119663
+  },
+  {
+   "file": "text/1937_1942.json",
+   "from": 1937,
+   "to": 1942,
+   "count": 1521,
+   "gz": 130816
+  },
+  {
+   "file": "text/1943_1947.json",
+   "from": 1943,
+   "to": 1947,
+   "count": 1474,
+   "gz": 121311
+  },
+  {
+   "file": "text/1948_1952.json",
+   "from": 1948,
+   "to": 1952,
+   "count": 1336,
+   "gz": 109884
+  },
+  {
+   "file": "text/1953_1957.json",
+   "from": 1953,
+   "to": 1957,
+   "count": 1349,
+   "gz": 111014
+  },
+  {
+   "file": "text/1958_1962.json",
+   "from": 1958,
+   "to": 1962,
+   "count": 1429,
+   "gz": 114142
+  },
+  {
+   "file": "text/1963_1967.json",
+   "from": 1963,
+   "to": 1967,
+   "count": 1542,
+   "gz": 123093
+  },
+  {
+   "file": "text/1968_1971.json",
+   "from": 1968,
+   "to": 1971,
+   "count": 1349,
+   "gz": 106129
+  },
+  {
+   "file": "text/1972_1975.json",
+   "from": 1972,
+   "to": 1975,
+   "count": 1335,
+   "gz": 104386
+  },
+  {
+   "file": "text/1976_1979.json",
+   "from": 1976,
+   "to": 1979,
+   "count": 1432,
+   "gz": 108243
+  },
+  {
+   "file": "text/1980_1983.json",
+   "from": 1980,
+   "to": 1983,
+   "count": 1520,
+   "gz": 111968
+  },
+  {
+   "file": "text/1984_1987.json",
+   "from": 1984,
+   "to": 1987,
+   "count": 1694,
+   "gz": 127836
+  },
+  {
+   "file": "text/1988_1991.json",
+   "from": 1988,
+   "to": 1991,
+   "count": 1617,
+   "gz": 123977
+  },
+  {
+   "file": "text/1992_1995.json",
+   "from": 1992,
+   "to": 1995,
+   "count": 1309,
+   "gz": 103215
+  },
+  {
+   "file": "text/1996_2001.json",
+   "from": 1996,
+   "to": 2001,
+   "count": 1411,
+   "gz": 110993
+  },
+  {
+   "file": "text/2002_2024.json",
+   "from": 2002,
+   "to": 2024,
+   "count": 1328,
+   "gz": 111116
+  },
+  {
+   "file": "text/2025_2026.json",
+   "from": 2025,
+   "to": 2026,
+   "count": 101,
+   "gz": 7447
+  }
+ ],
+ "categories": {
+  "war": {
+   "label": "戦い・戦争",
+   "hidden": false
+  },
+  "building": {
+   "label": "建物・遺跡",
+   "hidden": false
+  },
+  "politics": {
+   "label": "国・政治",
+   "hidden": false
+  },
+  "city": {
+   "label": "町の始まり",
+   "hidden": false
+  },
+  "disaster": {
+   "label": "災害",
+   "hidden": false
+  },
+  "sports_culture": {
+   "label": "スポーツ・文化",
+   "hidden": false
+  },
+  "science": {
+   "label": "発明・発見・探検",
+   "hidden": false
+  },
+  "people": {
+   "label": "人物（誕生）",
+   "hidden": true
+  }
+ },
+ "sources": [
+  {
+   "name": "Wikidata",
+   "url": "https://www.wikidata.org/",
+   "license": "CC0 1.0",
+   "note": "できごとの年・場所・名前"
+  },
+  {
+   "name": "ウィキペディア日本語版",
+   "url": "https://ja.wikipedia.org/",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0/deed.ja",
+   "note": "説明文（xs が wikipedia / ai-draft のもの）。各できごとの w が元の記事"
+  },
+  {
+   "name": "Natural Earth（world-atlas）",
+   "url": "https://www.naturalearthdata.com/",
+   "license": "Public Domain",
+   "note": "国境データ"
+  }
+ ]
+}

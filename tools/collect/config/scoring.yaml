@@ -1,0 +1,70 @@
+# 重要度のスコアと表示段階（tier）の割り当て（HANDOFF 6.3）
+#
+# score = カテゴリの重み × ( sitelinks の対数 × w.sitelinks
+#                            + 日本語版の記事があれば w.jawiki
+#                            + 要約の長さの対数 × w.wikipedia_length )
+#         × 座標の確かさ（coord_source ごとの係数）
+
+weights:
+  sitelinks: 1.0          # log10(1 + sitelink数)
+  jawiki: 0.5             # 日本語版の記事がある
+  wikipedia_length: 0.3   # log10(1 + 要約の文字数)。記事の長さの代わりの目安
+
+category_weight:
+  war: 1.0
+  politics: 1.1
+  building: 0.9
+  city: 0.8
+  disaster: 1.0
+  sports_culture: 0.9
+  science: 1.1
+  people: 0.8
+
+coord_factor:
+  self: 1.0
+  location: 0.95
+  country: 0.6            # 国の代表点に置いたもの。国の真ん中に重なるので控えめにする
+
+# 時代の区切り（偏りの補正の単位）。from 以上 to 未満を step 年ごと
+eras:
+  - { from: -4000, to: -1000, step: 500 }
+  - { from: -1000, to: 1500, step: 100 }
+  - { from: 1500, to: 1800, step: 50 }
+  - { from: 1800, to: 2030, step: 25 }
+
+# tier の目安の件数（種データを含む）。HANDOFF の初期値
+# 各区画（地域×時代）に順番に1件ずつ配り（スコアの高い順）、目安に届くまで回す。
+# min_score に届かないものは上げない（枠が埋まらない区画はそのまま空ける）
+#
+# max_share_per_category：その tier で1カテゴリが占められる割合の上限（種データは数えない）。
+# 超えた分は次の tier に回す。「かつて存在した国家」が多い politics が tier1 を占めないようにするため
+tiers:
+  1: { target: 500, min_score: 2.0, max_share_per_category: 0.3 }
+  2: { target: 3000, min_score: 1.2 }
+  3: { target: 15000, min_score: 0.0 }
+  # 4 は残り全部
+
+# 日本国内（japan: in）は地域とは別枠で多めに取る。上の target とは別に数える
+japan:
+  1: { target: 150, min_score: 1.8, max_share_per_category: 0.3 }
+  2: { target: 1000, min_score: 1.0 }
+  3: { target: 6000, min_score: 0.0 }
+
+# 人物（people）はアプリで初期非表示なので、上の枠とは別に数える。
+# 区画は上と同じ（地域×時代。日本国内は時代だけ）
+people:
+  world:
+    1: { target: 30, min_score: 2.0 }
+    2: { target: 700, min_score: 1.2 }
+    3: { target: 7000, min_score: 0.0 }
+  japan:
+    1: { target: 15, min_score: 1.8 }
+    2: { target: 200, min_score: 1.0 }
+    3: { target: 1200, min_score: 0.0 }
+
+# 種データとの重複判定（HANDOFF 5.3）
+dedupe:
+  year_tolerance: 1        # 年の差がこの範囲
+  distance_km: 50          # 距離がこの範囲
+  title_similarity: 0.5    # タイトルの近さ（文字の2-gramの一致率）がこれ以上なら同じとみなす
+  suspect_similarity: 0.25 # これ以上なら「重複の疑い」としてレビューに出す
