@@ -45,7 +45,8 @@ header p{margin:6px 0 0;color:#c9d3ee;font-size:15px}
 .gbtn{position:absolute;display:flex;gap:8px}
 .gbtn.tl{top:6px;left:6px}.gbtn.br{bottom:6px;right:6px;flex-direction:column}
 .chip{min-height:44px;min-width:44px;padding:0 16px;border-radius:999px;border:1px solid #ffffff40;background:#ffffff1c;color:#fff;font-weight:700;font-size:15px;backdrop-filter:blur(4px)}
-.chip:hover{background:#ffffff33}
+.chip:hover:not(:disabled){background:#ffffff33}
+.chip:disabled{opacity:.35;cursor:default}
 .chip.jp{background:var(--red);border-color:var(--red)}
 .land{fill:#e9dfc4;stroke:#9c8f6f;stroke-width:.5}
 .land.jp{fill:var(--red);stroke:#fff;stroke-width:.8}
@@ -184,6 +185,7 @@ const gap=(a,b)=>{let d=a-b;if(a>0&&b<0)d--;if(a<0&&b>0)d++;return d};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 // ---- 表示の調整（件数が多すぎ・少なすぎのときはここを直す） ----
+const ZMIN=1,ZMAX=4; // 拡大率の下限・上限
 const ZOOM_TIER=[[1.5,2],[2.4,3],[Infinity,4]]; // 拡大率がこれ未満なら、この tier まで出す
 const FEW=150;          // 地球儀に出る点がこれより少なければ、もう1段細かい tier まで出す
 const CELL=18;          // 点をまとめる升目の大きさ（px）
@@ -239,6 +241,7 @@ function size(){
  const W=host.clientWidth,H=host.clientHeight,dpr=Math.min(2,devicePixelRatio||1);
  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
  proj.translate([W/2,H/2]).scale(Math.min(W,H)/2*.9*S.zoom);draw();
+ $('zin').disabled=S.zoom>=ZMAX-1e-3;$('zout').disabled=S.zoom<=ZMIN+1e-3;
 }
 function visible(lo,la){return d3.geoDistance([lo,la],[-S.rot[0],-S.rot[1]])<Math.PI/2-.02}
 function draw(){
@@ -284,15 +287,26 @@ function dot(x,y,rr,jp,op){ctx.globalAlpha=op;ctx.beginPath();ctx.arc(x,y,rr,0,7
 let fly=null;
 function flyTo(lo,la,z){cancelAnimationFrame(fly);const a=S.rot.slice();let tx=-lo;while(tx-a[0]>180)tx-=360;while(tx-a[0]<-180)tx+=360;const b=[tx,Math.max(-70,Math.min(70,-la)),0],it=d3.interpolate(a,b),z0=S.zoom,z1=z??S.zoom,t0=performance.now(),dur=matchMedia('(prefers-reduced-motion:reduce)').matches?1:850;
  const step=t=>{const u=Math.min(1,(t-t0)/dur),q=d3.easeCubicInOut(u);S.rot=it(q);if(z1!==z0){S.zoom=z0+(z1-z0)*q;size()}else draw();if(u<1)fly=requestAnimationFrame(step);else if(z1!==z0)update()};fly=requestAnimationFrame(step)}
-let drag=null;
+let drag=null,pinch=null;
+const pts=new Map(); // 画面に触れている指（ポインター）
 const local=ev=>{const b=host.getBoundingClientRect();return[ev.clientX-b.left,ev.clientY-b.top]};
-host.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))return;cancelAnimationFrame(fly);drag={x:ev.clientX,y:ev.clientY,r:S.rot.slice(),moved:false,p:local(ev)};host.classList.add('grabbing');try{host.setPointerCapture(ev.pointerId)}catch(_){}});
-host.addEventListener('pointermove',ev=>{if(!drag)return;const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.hypot(dx,dy)>5)drag.moved=true;if(!drag.moved)return;const k=57.3/proj.scale();S.rot=[drag.r[0]+dx*k,Math.max(-85,Math.min(85,drag.r[1]-dy*k)),0];draw()});
-const endDrag=()=>{host.classList.remove('grabbing');if(drag&&!drag.moved)tap(drag.p);drag=null};
-host.addEventListener('pointerup',endDrag);host.addEventListener('pointercancel',()=>{host.classList.remove('grabbing');drag=null});
+const spread=()=>{const [a,b]=[...pts.values()];return Math.hypot(a.x-b.x,a.y-b.y)};
+const startDrag=(ev,tapOk)=>{drag={x:ev.clientX,y:ev.clientY,r:S.rot.slice(),moved:!tapOk,p:local(ev)}};
+host.addEventListener('pointerdown',ev=>{if(ev.target.closest('button'))return;cancelAnimationFrame(fly);pts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});try{host.setPointerCapture(ev.pointerId)}catch(_){}
+ if(pts.size===2){drag=null;host.classList.remove('grabbing');pinch={d:spread(),z:S.zoom};return} // 2本指：ピンチに切り替え
+ if(pts.size>2)return;
+ startDrag(ev,true);host.classList.add('grabbing')});
+host.addEventListener('pointermove',ev=>{if(!pts.has(ev.pointerId))return;pts.set(ev.pointerId,{x:ev.clientX,y:ev.clientY});
+ if(pinch&&pts.size===2){const d=spread();if(pinch.d>0)setZoom(pinch.z*d/pinch.d);return}
+ if(!drag)return;const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y;if(Math.hypot(dx,dy)>5)drag.moved=true;if(!drag.moved)return;const k=57.3/proj.scale();S.rot=[drag.r[0]+dx*k,Math.max(-85,Math.min(85,drag.r[1]-dy*k)),0];draw()});
+const release=(ev,canceled)=>{if(!pts.delete(ev.pointerId))return;
+ if(pinch){if(pts.size<2){pinch=null;if(pts.size===1){const [id,q]=[...pts][0];startDrag({clientX:q.x,clientY:q.y,pointerId:id},false)}} return} // ピンチ後に残った指はそのまま回転に使う（タップ扱いにしない）
+ if(pts.size)return;host.classList.remove('grabbing');if(!canceled&&drag&&!drag.moved)tap(drag.p);drag=null};
+host.addEventListener('pointerup',ev=>release(ev,false));host.addEventListener('pointercancel',ev=>release(ev,true));
 host.addEventListener('wheel',ev=>{ev.preventDefault();zoom(Math.exp(-ev.deltaY*.0015))},{passive:false});
 let zt=null;
-function zoom(f){S.zoom=Math.max(1,Math.min(4,S.zoom*f));size();clearTimeout(zt);zt=setTimeout(update,120)}
+function setZoom(z){cancelAnimationFrame(fly);S.zoom=Math.max(ZMIN,Math.min(ZMAX,z));size();clearTimeout(zt);zt=setTimeout(update,120)}
+function zoom(f){setZoom(S.zoom*f)}
 $('zin').onclick=()=>zoom(1.4);$('zout').onclick=()=>zoom(1/1.4);
 // タップ：いちばん近い点 → まとまりなら近づく → どれでもなければ国
 function tap([x,y]){
@@ -300,7 +314,7 @@ function tap([x,y]){
  for(const d of drawn){const dd=Math.hypot(d.x-x,d.y-y)-d.r;if(dd<Math.max(10,d.r*.5)&&dd<bd){bd=dd;best=d}}
  if(best&&best.e){pickEvent(best.e.i,false);return}
  if(best&&best.g){const g=best.g,c=d3.geoCentroid({type:'MultiPoint',coordinates:g.list.map(e=>[e.lo,e.la])});
-  if(S.zoom<3.9){flyTo(c[0],c[1],Math.min(4,S.zoom*1.8));return}
+  if(S.zoom<3.9){flyTo(c[0],c[1],Math.min(ZMAX,S.zoom*1.8));return}
   pickEvent(g.lead.i,false);return}
  const [cx,cy]=proj.translate();
  if(Math.hypot(x-cx,y-cy)<=proj.scale()){const ll=proj.invert([x,y]),f=ll&&C.find(f=>d3.geoContains(f,ll));
