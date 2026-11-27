@@ -15,7 +15,8 @@
     "review:export": "node tools/collect/src/review.js export",
     "review:import": "node tools/collect/src/review.js import",
     "build": "node tools/collect/src/build.js",
-    "all": "npm run fetch && npm run normalize && npm run score && npm run draft && npm run build",
+    "english": "node tools/collect/src/english.js",
+    "all": "npm run fetch && npm run normalize && npm run score && npm run draft && npm run build && npm run english",
     "report": "node tools/collect/src/report.js",
     "test": "node --test tools/collect/test/*.test.js",
     "favicon": "node tools/favicon/make.mjs"

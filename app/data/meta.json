@@ -563,34 +563,42 @@
  "categories": {
   "war": {
    "label": "戦い・戦争",
+   "label_en": "Wars & battles",
    "hidden": false
   },
   "building": {
    "label": "建物・遺跡",
+   "label_en": "Buildings & sites",
    "hidden": false
   },
   "politics": {
    "label": "国・政治",
+   "label_en": "Nations & politics",
    "hidden": false
   },
   "city": {
    "label": "町の始まり",
+   "label_en": "Founding of cities",
    "hidden": false
   },
   "disaster": {
    "label": "災害",
+   "label_en": "Disasters",
    "hidden": false
   },
   "sports_culture": {
    "label": "スポーツ・文化",
+   "label_en": "Sports & culture",
    "hidden": false
   },
   "science": {
    "label": "発明・発見・探検",
+   "label_en": "Inventions & exploration",
    "hidden": false
   },
   "people": {
    "label": "人物（誕生）",
+   "label_en": "People (births)",
    "hidden": true
   }
  },

@@ -11,6 +11,9 @@
 <meta property="og:description" content="年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？">
 <meta property="og:url" content="https://kwaka1208.github.io/jikan-globe/">
 <meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<link rel="alternate" hreflang="ja" href="https://kwaka1208.github.io/jikan-globe/?lang=ja">
+<link rel="alternate" hreflang="en" href="https://kwaka1208.github.io/jikan-globe/?lang=en">
 <meta property="og:image" content="https://kwaka1208.github.io/jikan-globe/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -39,9 +42,10 @@ button:focus-visible,input:focus-visible{outline:3px solid #ffb4ab;outline-offse
 .wrap{max-width:1240px;margin:0 auto}
 header h1{margin:0;font-size:clamp(28px,4vw,42px);line-height:1.1;font-weight:800;letter-spacing:.02em}
 header p{margin:6px 0 0;color:#c9d3ee;font-size:15px}
-header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center}header>div{display:contents}header h1{grid-area:1/1}header p{grid-area:2/1/3/3}header .helpb{grid-area:1/2}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center}header>div{display:contents}header h1{grid-area:1/1}header p{grid-area:2/1/3/3}header .hbtns{grid-area:1/2;display:flex;gap:8px}
 #help h3:first-of-type{margin-top:8px}
 .helpb{flex:none;padding:0 14px;font-size:14px}
+[data-lang]:not(.on){display:none}
 #help{width:min(560px,calc(100vw - 32px));max-height:min(86vh,720px);padding:0 22px;border:0;border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 20px 60px #0008;overflow-y:auto;overscroll-behavior:contain}
 #help::backdrop{background:#0c1222b3}
 #help .hhead{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;margin:0 -22px;padding:14px 12px 8px 22px;background:var(--card)}
@@ -147,44 +151,44 @@ h2 .mk{width:12px;height:12px;border-radius:50%;flex:none;border:2px solid #fff;
  <div class="wrap">
   <header>
    <div>
-    <h1>じかんの地球儀</h1>
-    <p>年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？</p>
+    <h1 data-t="name">じかんの地球儀</h1>
+    <p data-t="lead">年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？</p>
    </div>
-   <button class="chip helpb" type="button" data-help aria-haspopup="dialog">？ 使い方</button>
+   <nav class="hbtns"><button class="chip helpb" type="button" id="langb"></button><button class="chip helpb" type="button" data-help aria-haspopup="dialog" data-t="helpb">？ 使い方</button></nav>
   </header>
   <div class="grid">
    <div id="globe">
-    <svg class="base" role="img" aria-label="回せる地球儀。白い点は世界のできごと、赤い点は日本のできごと"></svg>
+    <svg class="base" role="img" data-ta="globe" aria-label="回せる地球儀。白い点は世界のできごと、赤い点は日本のできごと"></svg>
     <canvas aria-hidden="true"></canvas>
     <svg class="top" aria-hidden="true"></svg>
-    <div class="loading" id="loading">できごとを読みこみ中…</div>
-    <div class="gbtn tl"><button class="chip jp" id="home">日本にもどる</button></div>
-    <div class="gbtn br"><button class="chip" id="zin" aria-label="大きくする">＋</button><button class="chip" id="zout" aria-label="小さくする">－</button></div>
+    <div class="loading" id="loading" data-t="loading">できごとを読みこみ中…</div>
+    <div class="gbtn tl"><button class="chip jp" id="home" data-t="home">日本にもどる</button></div>
+    <div class="gbtn br"><button class="chip" id="zin" data-ta="zin" aria-label="大きくする">＋</button><button class="chip" id="zout" data-ta="zout" aria-label="小さくする">－</button></div>
    </div>
    <div class="time">
     <div class="row">
      <button class="play" id="play" aria-label="時間を進める">▶</button>
      <button class="step ten" data-s="-10">−10</button>
-     <button class="step" data-s="-1" aria-label="1年もどる">◀</button>
+     <button class="step" data-s="-1" data-ta="back1" aria-label="1年もどる">◀</button>
      <div class="track">
-      <input type="range" id="slider" min="0" max="1000" step="0.5" aria-label="年">
+      <input type="range" id="slider" min="0" max="1000" step="0.5" data-ta="year" aria-label="年">
       <div class="band" id="band"></div>
       <div class="ticks" id="ticks"></div>
      </div>
-     <button class="step" data-s="1" aria-label="1年すすむ">▶</button>
+     <button class="step" data-s="1" data-ta="fwd1" aria-label="1年すすむ">▶</button>
      <button class="step ten" data-s="10">+10</button>
     </div>
     <div class="eras" id="eras"></div>
-    <div class="cats" id="cats" role="group" aria-label="出すできごとの種類"></div>
+    <div class="cats" id="cats" role="group" data-ta="cats" aria-label="出すできごとの種類"></div>
    </div>
    <aside class="info" aria-live="polite">
     <div class="head">
      <div class="yr" id="yr"></div>
-     <div class="jpera">日本は <b id="era"></b></div>
+     <div class="jpera"><span data-t="jpera">日本は</span> <b id="era"></b></div>
     </div>
     <p class="note" id="winnote"></p>
     <div id="detail"></div>
-    <h2><span class="mk" style="background:var(--red)"></span>そのころ日本では</h2>
+    <h2><span class="mk" style="background:var(--red)"></span><span data-t="jph">そのころ日本では</span></h2>
     <div class="list" id="jplist"></div>
     <h2 id="wh"><span class="mk" style="background:#fff;border-color:#1b2a52"></span><span id="wtitle">そのころ世界では</span></h2>
     <div class="list" id="wlist"></div>
@@ -194,34 +198,79 @@ h2 .mk{width:12px;height:12px;border-radius:50%;flex:none;border:2px solid #fff;
  </div>
 </div>
 <dialog id="help" aria-labelledby="help-t">
- <div class="hhead"><h2 id="help-t">使い方</h2><button class="close" type="button" aria-label="閉じる" data-close>✕</button></div>
- <h3>地球儀</h3>
- <p>地球儀は指やマウスで回せます。点や国をタップすると、そこで起きたできごとが出てきます。</p>
- <p>大きくすると、もっと細かいできごとが出てきます。＋－のボタン、マウスのホイール、2本の指で広げたり縮めたりする操作で、大きさを変えられます。</p>
- <p>点が重なっているところは数字の丸になります。タップすると近づきます。</p>
- <h3>年と時代</h3>
- <p>下のつまみを動かすか、▶ を押すと年が進みます。時代の名前を押すと、その時代に飛びます。</p>
- <h3>できごとについて</h3>
- <p>できごとは、人が選んだ約130件と、Wikidata から集めたものです。集めたものは人がまだ確かめていないので、年や場所がちがうことがあります。年は代表的な説です（「ごろ」はおよその年）。国の形と国名は、昔のできごとも「いまの国」で表しています。</p>
- <h3>出典</h3>
- <p id="credits"><a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）、説明文は<a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">ウィキペディア日本語版</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。それぞれの記事へのリンクを説明の下に出しています）、国境は <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>（パブリックドメイン）。<span id="gen"></span></p>
- <p class="hfoot"><button class="chip ok" type="button" data-close>閉じる</button></p>
+ <div class="hhead"><h2 id="help-t" data-t="helpt">使い方</h2><button class="close" type="button" data-ta="close" aria-label="閉じる" data-close>✕</button></div>
+ <div data-lang="ja" lang="ja">
+  <h3>地球儀</h3>
+  <p>地球儀は指やマウスで回せます。点や国をタップすると、そこで起きたできごとが出てきます。</p>
+  <p>大きくすると、もっと細かいできごとが出てきます。＋－のボタン、マウスのホイール、2本の指で広げたり縮めたりする操作で、大きさを変えられます。</p>
+  <p>点が重なっているところは数字の丸になります。タップすると近づきます。</p>
+  <h3>年と時代</h3>
+  <p>下のつまみを動かすか、▶ を押すと年が進みます。時代の名前を押すと、その時代に飛びます。</p>
+  <h3>できごとについて</h3>
+  <p>できごとは、人が選んだ約130件と、Wikidata から集めたものです。集めたものは人がまだ確かめていないので、年や場所がちがうことがあります。年は代表的な説です（「ごろ」はおよその年）。国の形と国名は、昔のできごとも「いまの国」で表しています。</p>
+  <h3>出典</h3>
+  <p id="credits"><a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）、説明文は<a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">ウィキペディア日本語版</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。それぞれの記事へのリンクを説明の下に出しています）、国境は <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>（パブリックドメイン）。<span class="gen"></span></p>
+ </div>
+ <div data-lang="en" lang="en">
+  <h3>The globe</h3>
+  <p>Spin the globe with your finger or mouse. Tap a dot or a country to see the events that happened there.</p>
+  <p>Zoom in to see more, smaller events. Use the + and − buttons, the mouse wheel, or pinch with two fingers.</p>
+  <p>Where dots overlap, they turn into a circle with a number. Tap it to zoom in.</p>
+  <h3>Years and periods</h3>
+  <p>Move the slider at the bottom, or press ▶, to move through the years. Press the name of a Japanese period to jump to it.</p>
+  <h3>About the events</h3>
+  <p>The events are about 130 hand-picked ones plus many collected from Wikidata. The collected ones have not been checked by people yet, so the year or place may be wrong. Years follow the most common view (“c.” means about). Country borders and names are today’s, even for events long ago.</p>
+  <p>In English, the names and short descriptions of collected events come from Wikidata. Some events have no description, and a few have only a Japanese name.</p>
+  <h3>Sources</h3>
+  <p>Names, years and places: <a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a> (CC0). Each event links to its <a href="https://en.wikipedia.org/" target="_blank" rel="noopener noreferrer">Wikipedia</a> article where there is one. Japanese descriptions: <a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">Japanese Wikipedia</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>). Borders: <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a> (public domain).<span class="gen"></span></p>
+ </div>
+ <p class="hfoot"><button class="chip ok" type="button" data-close data-t="close">閉じる</button></p>
 </dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 {
 // ---- 定数（試作版から） ----
 const JA={'Japan':'日本','China':'中国','South Korea':'韓国','North Korea':'北朝鮮','Mongolia':'モンゴル','Taiwan':'台湾','Russia':'ロシア','India':'インド','Pakistan':'パキスタン','Nepal':'ネパール','Cambodia':'カンボジア','Vietnam':'ベトナム','Thailand':'タイ','Indonesia':'インドネシア','Philippines':'フィリピン','Malaysia':'マレーシア','Myanmar':'ミャンマー','Bangladesh':'バングラデシュ','Sri Lanka':'スリランカ','Australia':'オーストラリア','New Zealand':'ニュージーランド','Iraq':'イラク','Iran':'イラン','Saudi Arabia':'サウジアラビア','Israel':'イスラエル','Palestine':'パレスチナ','Jordan':'ヨルダン','Syria':'シリア','Lebanon':'レバノン','Turkey':'トルコ','Afghanistan':'アフガニスタン','Kazakhstan':'カザフスタン','Uzbekistan':'ウズベキスタン','Egypt':'エジプト','Ethiopia':'エチオピア','Kenya':'ケニア','Tanzania':'タンザニア','South Africa':'南アフリカ','Zimbabwe':'ジンバブエ','Mali':'マリ','Ghana':'ガーナ','Nigeria':'ナイジェリア','Morocco':'モロッコ','Algeria':'アルジェリア','Libya':'リビア','Tunisia':'チュニジア','Sudan':'スーダン','Madagascar':'マダガスカル','Dem. Rep. Congo':'コンゴ民主共和国','Greece':'ギリシャ','Italy':'イタリア','France':'フランス','Germany':'ドイツ','Spain':'スペイン','Portugal':'ポルトガル','United Kingdom':'イギリス','Ireland':'アイルランド','Iceland':'アイスランド','Netherlands':'オランダ','Belgium':'ベルギー','Switzerland':'スイス','Austria':'オーストリア','Poland':'ポーランド','Czechia':'チェコ','Hungary':'ハンガリー','Romania':'ルーマニア','Bulgaria':'ブルガリア','Serbia':'セルビア','Croatia':'クロアチア','Bosnia and Herz.':'ボスニア・ヘルツェゴビナ','Macedonia':'北マケドニア','Ukraine':'ウクライナ','Sweden':'スウェーデン','Norway':'ノルウェー','Finland':'フィンランド','Denmark':'デンマーク','United States of America':'アメリカ','Canada':'カナダ','Mexico':'メキシコ','Guatemala':'グアテマラ','Cuba':'キューバ','Bahamas':'バハマ','Colombia':'コロンビア','Venezuela':'ベネズエラ','Peru':'ペルー','Bolivia':'ボリビア','Chile':'チリ','Brazil':'ブラジル','Argentina':'アルゼンチン','Greenland':'グリーンランド','Antarctica':'南極','Fiji':'フィジー','W. Sahara':'西サハラ','Papua New Guinea':'パプアニューギニア','Somalia':'ソマリア','Chad':'チャド','Haiti':'ハイチ','Dominican Rep.':'ドミニカ共和国','Falkland Is.':'フォークランド諸島','Fr. S. Antarctic Lands':'フランス領南方・南極地域','Timor-Leste':'東ティモール','Lesotho':'レソト','Uruguay':'ウルグアイ','Panama':'パナマ','Costa Rica':'コスタリカ','Nicaragua':'ニカラグア','Honduras':'ホンジュラス','El Salvador':'エルサルバドル','Belize':'ベリーズ','Guyana':'ガイアナ','Suriname':'スリナム','Ecuador':'エクアドル','Puerto Rico':'プエルトリコ','Jamaica':'ジャマイカ','Botswana':'ボツワナ','Namibia':'ナミビア','Senegal':'セネガル','Mauritania':'モーリタニア','Benin':'ベナン','Niger':'ニジェール','Cameroon':'カメルーン','Togo':'トーゴ','Côte d\'Ivoire':'コートジボワール','Guinea':'ギニア','Guinea-Bissau':'ギニアビサウ','Liberia':'リベリア','Sierra Leone':'シエラレオネ','Burkina Faso':'ブルキナファソ','Central African Rep.':'中央アフリカ','Congo':'コンゴ共和国','Gabon':'ガボン','Eq. Guinea':'赤道ギニア','Zambia':'ザンビア','Malawi':'マラウイ','Mozambique':'モザンビーク','eSwatini':'エスワティニ','Angola':'アンゴラ','Burundi':'ブルンジ','Gambia':'ガンビア','United Arab Emirates':'アラブ首長国連邦','Qatar':'カタール','Kuwait':'クウェート','Oman':'オマーン','Vanuatu':'バヌアツ','Laos':'ラオス','Bhutan':'ブータン','Tajikistan':'タジキスタン','Kyrgyzstan':'キルギス','Turkmenistan':'トルクメニスタン','Armenia':'アルメニア','Belarus':'ベラルーシ','Moldova':'モルドバ','Lithuania':'リトアニア','Latvia':'ラトビア','Estonia':'エストニア','Albania':'アルバニア','Luxembourg':'ルクセンブルク','New Caledonia':'ニューカレドニア','Solomon Is.':'ソロモン諸島','Azerbaijan':'アゼルバイジャン','Georgia':'ジョージア','Brunei':'ブルネイ','Slovenia':'スロベニア','Slovakia':'スロバキア','Eritrea':'エリトリア','Paraguay':'パラグアイ','Yemen':'イエメン','N. Cyprus':'北キプロス','Cyprus':'キプロス','Djibouti':'ジブチ','Somaliland':'ソマリランド','Uganda':'ウガンダ','Rwanda':'ルワンダ','Montenegro':'モンテネグロ','Kosovo':'コソボ','Trinidad and Tobago':'トリニダード・トバゴ','S. Sudan':'南スーダン'};
-const jn=n=>JA[n]||n;
-const ERAS=[[-40000,-14000,'旧石器時代'],[-14000,-400,'縄文時代'],[-400,250,'弥生時代'],[250,592,'古墳時代'],[592,710,'飛鳥時代'],[710,794,'奈良時代'],[794,1185,'平安時代'],[1185,1333,'鎌倉時代'],[1333,1336,'建武の新政'],[1336,1573,'室町時代'],[1573,1603,'安土桃山時代'],[1603,1868,'江戸時代'],[1868,1912,'明治時代'],[1912,1926,'大正時代'],[1926,1989,'昭和時代'],[1989,2019,'平成'],[2019,9999,'令和']];
-const CHIPS=[['縄文',-3000],['弥生',-300],['古墳',300],['飛鳥',600],['奈良',710],['平安',794],['鎌倉',1185],['室町',1338],['戦国',1467],['安土桃山',1573],['江戸',1603],['明治',1868],['大正',1912],['昭和',1926],['平成',1989],['令和',2019]];
-const eraOf=y=>y<-40000?'旧石器時代より前':(ERAS.find(e=>y>=e[0]&&y<e[1])||ERAS[0])[2];
+// 英語の国名：Natural Earth の略した名前だけ直す。ほかはそのまま
+const EN_C={'United States of America':'United States','Dem. Rep. Congo':'DR Congo','Bosnia and Herz.':'Bosnia and Herzegovina','Central African Rep.':'Central African Republic','Dominican Rep.':'Dominican Republic','Eq. Guinea':'Equatorial Guinea','Falkland Is.':'Falkland Islands','Fr. S. Antarctic Lands':'French Southern and Antarctic Lands','N. Cyprus':'Northern Cyprus','S. Sudan':'South Sudan','Solomon Is.':'Solomon Islands','W. Sahara':'Western Sahara','Macedonia':'North Macedonia','eSwatini':'Eswatini'};
+
+// ---- ことば（日本語・英語） ----
+// ?lang=en / ?lang=ja → 前に選んだもの → ブラウザの言語（日本語以外なら英語）
+const store={get(k){try{return localStorage.getItem(k)}catch(_){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(_){}}};
+const qlang=new URLSearchParams(location.search).get('lang');
+let LANG=qlang==='en'||qlang==='ja'?qlang:store.get('lang')||((navigator.language||'ja').toLowerCase().startsWith('ja')?'ja':'en');
+const I18N={
+ ja:{name:'じかんの地球儀',lead:'年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？',helpb:'？ 使い方',helpt:'使い方',close:'閉じる',loading:'できごとを読みこみ中…',home:'日本にもどる',jpera:'日本は',jph:'そのころ日本では',
+  globe:'回せる地球儀。白い点は世界のできごと、赤い点は日本のできごと',zin:'大きくする',zout:'小さくする',back1:'1年もどる',fwd1:'1年すすむ',year:'年',cats:'出すできごとの種類',play:'時間を進める',pause:'止める',
+  langb:'English',langl:'en',show:'出すもの',japan:'日本',world:'そのころ世界では',inC:c=>`${c}では`,selected:'えらんだできごと',
+  win:(w,n)=>`前後${w}年のできごとを表示中（${n}件）`,more:n=>`もっと見る（あと${n}件）`,textLoading:'説明を読みこみ中…',
+  rel:(d,edge)=>(d===0?'この年':d<0?`${-d}年前`:`${d}年後`)+(edge==='end'?'に終わり':edge==='start'?'に始まり':''),
+  eraTag:e=>`日本は${e}`,link:'日本とつながり',un:'未確認',moreLink:'くわしく：',srcLabel:'出典：',wp:t=>`ウィキペディア「${t}」`,article:'記事',
+  jpEmpty:'このころの日本のできごとは、まだ入っていません。いちばん近いのは…',cEmptyNear:c=>`このころの${c}のできごとは、まだ入っていません。近い時代では…`,cEmpty:c=>`${c}のできごとは、まだ入っていません。`,wEmpty:'この時代のできごとは、まだ少ないです。近い時代では…',
+  gen:d=>` データの作成日：${d}。`,err:'データを読みこめませんでした。ページを開き直してください。',errFile:'データを読みこめませんでした。ファイルを直接開いたときは、ローカルのサーバー（例：npx serve app）から開いてください。'},
+ en:{name:'Time Globe',lead:'Move through the years and watch world events appear on the globe. What period was Japan in at the time?',helpb:'? Help',helpt:'How to use',close:'Close',loading:'Loading events…',home:'Back to Japan',jpera:'Japan:',jph:'Meanwhile in Japan',
+  globe:'A globe you can spin. White dots are world events, red dots are events in Japan',zin:'Zoom in',zout:'Zoom out',back1:'Back 1 year',fwd1:'Forward 1 year',year:'Year',cats:'Kinds of events to show',play:'Play',pause:'Pause',
+  langb:'日本語',langl:'ja',show:'Show',japan:'Japan',world:'Meanwhile in the world',inC:c=>`In ${THE.has(c)?'the ':''}${c}`,selected:'Selected event',
+  win:(w,n)=>`Showing events within ${w} years (${n})`,more:n=>`Show more (${n} left)`,textLoading:'Loading description…',
+  rel:(d,edge)=>{const n=Math.abs(d),yrs=`${n} year${n===1?'':'s'}`;const v=edge==='end'?'ended ':edge==='start'?'began ':'';return d===0?(v?v+'this year':'this year'):`${v}${yrs} ${d<0?(v?'before':'earlier'):'later'}`},
+  eraTag:e=>`Japan: ${e}`,link:'Linked to Japan',un:'Unverified',moreLink:'More: ',srcLabel:'Source: ',wp:t=>`Wikipedia “${t}”`,article:'article',
+  jpEmpty:'No events in Japan from this time yet. The nearest one is…',cEmptyNear:c=>`No events in ${THE.has(c)?'the ':''}${c} from this time yet. From nearby times…`,cEmpty:c=>`No events in ${THE.has(c)?'the ':''}${c} yet.`,wEmpty:'Only a few events from this time so far. From nearby times…',
+  gen:d=>` Data generated: ${d}.`,err:'Could not load the data. Please reload the page.',errFile:'Could not load the data. If you opened the file directly, open it from a local server instead (e.g. npx serve app).'}};
+const T=k=>I18N[LANG][k];
+// 英語で the をつける国名（見出しの「In the United Kingdom」など）
+const THE=new Set(['United States','United Kingdom','Netherlands','Philippines','Bahamas','DR Congo','Central African Republic','Dominican Republic','United Arab Emirates','Solomon Islands','Falkland Islands','Gambia']);
+const jn=n=>LANG==='en'?EN_C[n]||n:JA[n]||n;
+const ERAS=[[-40000,-14000,'旧石器時代','Paleolithic period'],[-14000,-400,'縄文時代','Jōmon period'],[-400,250,'弥生時代','Yayoi period'],[250,592,'古墳時代','Kofun period'],[592,710,'飛鳥時代','Asuka period'],[710,794,'奈良時代','Nara period'],[794,1185,'平安時代','Heian period'],[1185,1333,'鎌倉時代','Kamakura period'],[1333,1336,'建武の新政','Kenmu Restoration'],[1336,1573,'室町時代','Muromachi period'],[1573,1603,'安土桃山時代','Azuchi-Momoyama period'],[1603,1868,'江戸時代','Edo period'],[1868,1912,'明治時代','Meiji era'],[1912,1926,'大正時代','Taishō era'],[1926,1989,'昭和時代','Shōwa era'],[1989,2019,'平成','Heisei era'],[2019,9999,'令和','Reiwa era']];
+const CHIPS=[['縄文',-3000,'Jōmon'],['弥生',-300,'Yayoi'],['古墳',300,'Kofun'],['飛鳥',600,'Asuka'],['奈良',710,'Nara'],['平安',794,'Heian'],['鎌倉',1185,'Kamakura'],['室町',1338,'Muromachi'],['戦国',1467,'Sengoku'],['安土桃山',1573,'Azuchi-Momoyama'],['江戸',1603,'Edo'],['明治',1868,'Meiji'],['大正',1912,'Taishō'],['昭和',1926,'Shōwa'],['平成',1989,'Heisei'],['令和',2019,'Reiwa']];
+// 時代の名前。key は年のつまみの帯（#band）との照合に使う（ことばによらない）
+const eraIdx=y=>y<-40000?-1:Math.max(0,ERAS.findIndex(e=>y>=e[0]&&y<e[1]));
+const eraOf=y=>{const i=eraIdx(y);return i<0?(LANG==='en'?'before the Paleolithic':'旧石器時代より前'):ERAS[i][LANG==='en'?3:2]};
 const BP=[[0,-3500],[150,-500],[300,500],[450,1200],[600,1600],[750,1850],[1000,2026]];
 const lerp=(x,a,b,c,d)=>c+(x-a)/(b-a)*(d-c);
 function p2y(p){for(let i=1;i<BP.length;i++)if(p<=BP[i][0])return lerp(p,BP[i-1][0],BP[i][0],BP[i-1][1],BP[i][1]);return 2026}
 function y2p(y){for(let i=1;i<BP.length;i++)if(y<=BP[i][1])return lerp(y,BP[i-1][1],BP[i][1],BP[i-1][0],BP[i][0]);return 1000}
 const fixY=y=>{y=Math.max(-3500,Math.min(2026,Math.round(y)));return y===0?1:y};
-const yl=y=>y<0?`紀元前${-y}年`:`${y}年`;
+const yl=y=>LANG==='en'?(y<0?`${-y} BC`:`${y}`):y<0?`紀元前${-y}年`:`${y}年`;
 const win=y=>y<-500?250:y<500?100:y<1200?50:y<1600?25:y<1850?15:8;
 const gap=(a,b)=>{let d=a-b;if(a>0&&b<0)d--;if(a<0&&b>0)d++;return d};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -238,8 +287,10 @@ const S={year:1868,country:'Japan',ev:null,rot:[-138,-36,0],zoom:1,cats:new Set(
 let META=null;
 const E=[],byId=new Map();          // 読みこんだできごと（索引＋チャンク）
 const chunkState=new Map();          // file -> 'loading' | 'done'
-const textCache=new Map();           // file -> Promise<object>
-const TEXT={};                       // id -> {x,xs,w}
+const textCache=new Map();           // lang+file -> Promise<object>
+const TEXTS={ja:{},en:{}};           // lang -> id -> {x,xs,w}
+const EN=new Map();                  // id -> [title, place?]（英語のときだけ読む）
+const enState=new Map();             // file -> 'loading' | 'done'
 let cand=[],maxTier=2,drawn=[];      // 地球儀に出す候補、いまの tier、描いた点（タップ判定用）
 
 const $=id=>document.getElementById(id);
@@ -258,7 +309,11 @@ const hasEnd=e=>e.ye!=null&&e.ye>e.y;
 const nearEnd=(e,y)=>hasEnd(e)&&Math.abs(gap(e.ye,y))<Math.abs(gap(e.y,y));
 function dist(e,y){return Math.abs(gap(nearEnd(e,y)?e.ye:e.y,y))}
 const shownCat=e=>S.cats.has(e.cat);
-const whenOf=e=>esc(yl(e.y))+(e.a?'ごろ':'')+(hasEnd(e)?'〜'+esc(yl(e.ye))+(e.a?'ごろ':''):'');
+const ab=y=>LANG==='en'?'c. '+yl(y):yl(y)+'ごろ'; // およその年
+const whenOf=e=>{const f=e.a?ab:yl;return esc(f(e.y))+(hasEnd(e)?(LANG==='en'?' – ':'〜')+esc(f(e.ye)):'')};
+// 英語の名前と場所（なければ日本語の名前・国の英語名）
+const titleOf=e=>LANG==='en'&&EN.has(e.id)?EN.get(e.id)[0]:e.t;
+const placeOf=e=>LANG==='en'?(EN.get(e.id)?.[1]||jn(e.c)):e.p||jn(e.c);
 
 // tier 3〜4 のチャンクを読む（読みこみ済みは使い回す）
 function needChunks(lo,hi){
@@ -268,14 +323,24 @@ function needChunks(lo,hi){
   chunkState.set(c.file,'loading');
   fetch('data/'+c.file).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(list=>{add(list);chunkState.set(c.file,'done');update()})
    .catch(()=>chunkState.delete(c.file));
+  if(LANG==='en')needEn(c.file);
  }
+}
+// 英語の名前と場所。日本語の index / chunks と同じファイル名で data/en/ にある
+function needEn(file){
+ if(enState.has(file))return Promise.resolve();
+ enState.set(file,'loading');
+ return fetch('data/en/'+file).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(o=>{for(const k in o)EN.set(k,o[k]);enState.set(file,'done');update()})
+  .catch(()=>enState.delete(file));
 }
 // 説明文はタップされたときに読む
 function needText(e){
+ const lang=LANG,TEXT=TEXTS[lang];
  if(!META||e.id in TEXT)return;
  const f=META.text.find(c=>e.y>=c.from&&e.y<=c.to);if(!f){TEXT[e.id]=null;return}
- if(!textCache.has(f.file))textCache.set(f.file,fetch('data/'+f.file).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(o=>{Object.assign(TEXT,o);return o}).catch(()=>{textCache.delete(f.file);return null}));
- textCache.get(f.file).then(o=>{if(o&&!(e.id in TEXT))TEXT[e.id]=null;if(S.ev===e.i)update()});
+ const url='data/'+(lang==='en'?'en/':'')+f.file;
+ if(!textCache.has(url))textCache.set(url,fetch(url).then(r=>{if(!r.ok)throw r.status;return r.json()}).then(o=>{Object.assign(TEXT,o);return o}).catch(()=>{textCache.delete(url);return null}));
+ textCache.get(url).then(o=>{if(o&&!(e.id in TEXT))TEXT[e.id]=null;if(S.ev===e.i)update()});
 }
 
 // ---- 地球儀 ----
@@ -320,8 +385,8 @@ function draw(){
  let ring='',lab='';
  if(sel&&visible(sel.lo,sel.la)){const [x,y]=proj([sel.lo,sel.la]),rr=9*k;dot(x,y,rr,sel.jp,1);drawn.push({x,y,r:rr,e:sel});
   ring=`<circle class="ring" cx="${x}" cy="${y}" r="${rr+4}"/>`;
-  if(!sel.jp)lab+=`<text class="glabel" x="${x+14}" y="${y+5}">${esc(sel.t.length>14?sel.t.slice(0,13)+'…':sel.t)}</text>`}
- if(japan&&visible(138,37)){const[x,y]=proj([141.5,39.5]);lab=`<text class="glabel" x="${x+8}" y="${y}">日本</text>`+lab}
+  if(!sel.jp){const t=titleOf(sel),m=LANG==='en'?24:14;lab+=`<text class="glabel" x="${x+14}" y="${y+5}">${esc(t.length>m?t.slice(0,m-1)+'…':t)}</text>`}}
+ if(japan&&visible(138,37)){const[x,y]=proj([141.5,39.5]);lab=`<text class="glabel" x="${x+8}" y="${y}">${T('japan')}</text>`+lab}
  topSvg.select('g.rings').html(ring);topSvg.select('g.labels').html(lab);
 }
 function dot(x,y,rr,jp,op){ctx.globalAlpha=op;ctx.beginPath();ctx.arc(x,y,rr,0,7);ctx.fillStyle=jp?'#e5473b':'#ffffff';ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle=jp?'#ffffff':'#1b2a52';ctx.stroke();ctx.globalAlpha=1}
@@ -375,46 +440,49 @@ function setYear(y,fromSlider){S.year=fixY(y);S.ev=null;resetMore();if(!fromSlid
 slider.addEventListener('input',()=>setYear(p2y(+slider.value),true));
 document.querySelectorAll('.step').forEach(b=>b.onclick=()=>{stop();let y=S.year+(+b.dataset.s);if(S.year>0&&y<=0)y--;if(S.year<0&&y>=0)y++;setYear(y)});
 let timer=null;const playB=$('play');
-function stop(){clearInterval(timer);timer=null;playB.textContent='▶';playB.setAttribute('aria-label','時間を進める')}
-playB.onclick=()=>{if(timer){stop();return}if(+slider.value>=999)slider.value=0;playB.textContent='❚❚';playB.setAttribute('aria-label','止める');timer=setInterval(()=>{const p=Math.min(1000,+slider.value+.7);slider.value=p;setYear(p2y(p),true);if(p>=1000)stop()},60)};
-$('ticks').innerHTML=BP.map(b=>`<span style="left:${b[0]/10}%">${b[1]<0?'前'+(-b[1]):b[1]}</span>`).join('');
+function stop(){clearInterval(timer);timer=null;playB.textContent='▶';playB.setAttribute('aria-label',T('play'))}
+playB.onclick=()=>{if(timer){stop();return}if(+slider.value>=999)slider.value=0;playB.textContent='❚❚';playB.setAttribute('aria-label',T('pause'));timer=setInterval(()=>{const p=Math.min(1000,+slider.value+.7);slider.value=p;setYear(p2y(p),true);if(p>=1000)stop()},60)};
+function renderTicks(){$('ticks').innerHTML=BP.map(b=>`<span style="left:${b[0]/10}%">${b[1]<0?(LANG==='en'?-b[1]+' BC':'前'+(-b[1])):b[1]}</span>`).join('');fitTicks()}
 // 目盛りの文字：隣と重なるものは隠す。残す順は 両端 → 1200 → 前500・1850 → 500・1600
 const TICK_ORDER=[0,6,3,1,5,2,4];
 function fitTicks(){const sp=[...$('ticks').children];sp.forEach(e=>e.classList.remove('off'));
  const R=sp.map(e=>e.getBoundingClientRect()),kept=[];
  for(const i of TICK_ORDER){if(!sp[i])continue;if(kept.some(k=>R[i].left<R[k].right+4&&R[k].left<R[i].right+4))sp[i].classList.add('off');else kept.push(i)}}
-new ResizeObserver(fitTicks).observe($('ticks'));document.fonts?.ready.then(fitTicks); // 文字の幅はフォントの読みこみ後に変わる
-$('band').innerHTML=ERAS.filter(e=>e[1]>-3500).map(e=>{const a=y2p(Math.max(-3500,e[0])),b=y2p(Math.min(2026,e[1]));return`<i data-e="${esc(e[2])}" style="left:${a/10}%;width:${(b-a)/10}%"></i>`}).join('');
-$('eras').innerHTML=CHIPS.map(c=>`<button data-y="${c[1]}">${c[0]}</button>`).join('');
+renderTicks();new ResizeObserver(fitTicks).observe($('ticks'));document.fonts?.ready.then(fitTicks); // 文字の幅はフォントの読みこみ後に変わる
+$('band').innerHTML=ERAS.filter(e=>e[1]>-3500).map(e=>{const a=y2p(Math.max(-3500,e[0])),b=y2p(Math.min(2026,e[1]));return`<i data-e="${ERAS.indexOf(e)}" style="left:${a/10}%;width:${(b-a)/10}%"></i>`}).join('');
+const renderEras=()=>{$('eras').innerHTML=CHIPS.map(c=>`<button data-y="${c[1]}">${c[LANG==='en'?2:0]}</button>`).join('')};renderEras();
 $('eras').addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){stop();setYear(+b.dataset.y)}});
 
 // ---- カテゴリの絞り込み ----
 // データには残したまま、アプリでは選べないようにするカテゴリと、最初に出すカテゴリ
 const CAT_OFF=new Set(['city']),CAT_DEFAULT=['politics'];
 function renderCats(){
- $('cats').innerHTML='<span>出すもの</span>'+Object.entries(META.categories).filter(([k])=>!CAT_OFF.has(k)).map(([k,v])=>`<button data-c="${esc(k)}" aria-pressed="${S.cats.has(k)}">${esc(v.label)}</button>`).join('');
+ $('cats').innerHTML=`<span>${T('show')}</span>`+Object.entries(META.categories).filter(([k])=>!CAT_OFF.has(k)).map(([k,v])=>`<button data-c="${esc(k)}" aria-pressed="${S.cats.has(k)}">${esc(LANG==='en'&&v.label_en||v.label)}</button>`).join('');
 }
 $('cats').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;const c=b.dataset.c;S.cats.has(c)?S.cats.delete(c):S.cats.add(c);b.setAttribute('aria-pressed',S.cats.has(c));
  if(S.ev!=null&&!S.cats.has(E[S.ev].cat))S.ev=null;resetMore();update()});
 
 // ---- 右のパネル ----
 function resetMore(){S.more.jp=0;S.more.w=0}
-function card(e,opt={}){const end=nearEnd(e,S.year),d=gap(end?e.ye:e.y,S.year),rel=(d===0?'この年':d<0?`${-d}年前`:`${d}年後`)+(hasEnd(e)?(end?'に終わり':'に始まり'):'');
+function card(e,opt={}){const end=nearEnd(e,S.year),d=gap(end?e.ye:e.y,S.year),rel=I18N[LANG].rel(d,hasEnd(e)?(end?'end':'start'):null);
  let body='';
- if(opt.d){const t=TEXT[e.id];
-  body=t===undefined?'<p class="empty">説明を読みこみ中…</p>':t&&t.x?`<p>${esc(t.x)}</p>`:'';
-  if(t&&t.w)body+=`<span class="src">${t.xs==='human'?'くわしく：':'出典：'}<a href="${esc(t.w)}" target="_blank" rel="noopener noreferrer">ウィキペディア「${esc(decodeTitle(t.w))}」</a>${t.xs==='wikipedia'||t.xs==='ai-draft'?'（CC BY-SA 4.0）':''}</span>`;
-  else if(e.src!=='seed'&&e.id.startsWith('Q'))body+=`<span class="src">出典：<a href="https://www.wikidata.org/wiki/${esc(e.id)}" target="_blank" rel="noopener noreferrer">Wikidata ${esc(e.id)}</a></span>`}
- return`<button class="ev${e.i===S.ev?' on':''}" data-i="${e.i}"><span class="when">${whenOf(e)}・${rel}</span><b>${esc(e.t)}</b><span class="pl">${esc(e.p||jn(e.c))}</span>${body}${!e.jp?`<span class="tag">日本は${esc(eraOf(end?e.ye:e.y))}</span>`:''}${e.j==='link'&&!e.jp?'<span class="tag link">日本とつながり</span>':''}${S.all&&!e.rv?'<span class="tag un">未確認</span>':''}</button>`}
-function decodeTitle(u){try{return decodeURIComponent(u.split('/wiki/')[1]||'').replace(/_/g,' ')}catch(_){return'記事'}}
+ if(opt.d){const t=TEXTS[LANG][e.id],wd=e.src!=='seed'&&e.id.startsWith('Q')?`<a href="https://www.wikidata.org/wiki/${esc(e.id)}" target="_blank" rel="noopener noreferrer">Wikidata ${esc(e.id)}</a>`:'';
+  body=t===undefined?`<p class="empty">${T('textLoading')}</p>`:t&&t.x?`<p>${esc(t.x)}</p>`:'';
+  const wp=t&&t.w?`<a href="${esc(t.w)}" target="_blank" rel="noopener noreferrer">${esc(T('wp')(decodeTitle(t.w)))}</a>`:'';
+  // 英語の説明は Wikidata（CC0）のもの。英語版ウィキペディアは記事へのリンクだけ
+  if(LANG==='en'&&t&&t.xs==='wikidata')body+=`<span class="src">${wd?T('srcLabel')+wd:''}${wd&&wp?' · ':''}${wp?T('moreLink')+wp:''}</span>`;
+  else if(wp)body+=`<span class="src">${t.xs==='human'?T('moreLink'):T('srcLabel')}${wp}${t.xs==='wikipedia'||t.xs==='ai-draft'?'（CC BY-SA 4.0）':''}</span>`;
+  else if(wd)body+=`<span class="src">${T('srcLabel')}${wd}</span>`}
+ return`<button class="ev${e.i===S.ev?' on':''}" data-i="${e.i}"><span class="when">${whenOf(e)}${LANG==='en'?' · ':'・'}${rel}</span><b>${esc(titleOf(e))}</b><span class="pl">${esc(placeOf(e))}</span>${body}${!e.jp?`<span class="tag">${esc(T('eraTag')(eraOf(end?e.ye:e.y)))}</span>`:''}${e.j==='link'&&!e.jp?`<span class="tag link">${T('link')}</span>`:''}${S.all&&!e.rv?`<span class="tag un">${T('un')}</span>`:''}</button>`}
+function decodeTitle(u){try{return decodeURIComponent(u.split('/wiki/')[1]||'').replace(/_/g,' ')}catch(_){return T('article')}}
 const near=(list,n)=>list.slice().sort((a,b)=>dist(a,S.year)-dist(b,S.year)).slice(0,n);
 const rank=list=>list.sort((a,b)=>a.tr-b.tr||a._d-b._d);
 function listHTML(items,key,opt){const n=LIST_N[key]*(1+S.more[key]),shown=items.slice(0,n),rest=items.length-shown.length;
- return shown.map(e=>card(e,opt(e))).join('')+(rest>0?`<button class="more" data-more="${key}">もっと見る（あと${rest}件）</button>`:'')}
+ return shown.map(e=>card(e,opt(e))).join('')+(rest>0?`<button class="more" data-more="${key}">${T('more')(rest)}</button>`:'')}
 
 function update(){
  if(!META)return;
- const y=S.year,w=win(y),era=eraOf(y);
+ const y=S.year,w=win(y),era=eraOf(y),ei=String(eraIdx(y));
  for(const e of E)e._d=dist(e,y);
  const inw=e=>e._d<=w;
  // 拡大率から tier を決め、点が少なすぎればもう1段細かく
@@ -426,22 +494,22 @@ function update(){
  cand=pool.filter(e=>e.tr<=maxTier);
 
  $('yr').textContent=yl(y);$('era').textContent=era;
- $('winnote').textContent=`前後${w}年のできごとを表示中（${cand.length.toLocaleString()}件）`;
- document.querySelectorAll('#band i').forEach(i=>i.classList.toggle('on',i.dataset.e===era));
+ $('winnote').textContent=T('win')(w,cand.length.toLocaleString(LANG));
+ document.querySelectorAll('#band i').forEach(i=>i.classList.toggle('on',i.dataset.e===ei));
  const cur=CHIPS.filter(c=>c[1]<=y).pop();
  document.querySelectorAll('#eras button').forEach(b=>b.classList.toggle('on',!!cur&&+b.dataset.y===cur[1]));
 
  const isSel=e=>({d:e.i===S.ev});
  const J=E.filter(e=>e.jp&&shownCat(e)),jw=rank(cand.filter(e=>e.jp));
- $('jplist').innerHTML=jw.length?listHTML(jw,'jp',isSel):`<p class="empty">このころの日本のできごとは、まだ入っていません。いちばん近いのは…</p>`+near(J,1).map(e=>card(e,isSel(e))).join('');
+ $('jplist').innerHTML=jw.length?listHTML(jw,'jp',isSel):`<p class="empty">${T('jpEmpty')}</p>`+near(J,1).map(e=>card(e,isSel(e))).join('');
  let title,list,empty;
- if(S.country&&S.country!=='Japan'){const inC=E.filter(e=>e.c===S.country&&shownCat(e));title=`${jn(S.country)}では`;list=rank(inC.filter(inw));
-  empty=inC.length?`<p class="empty">このころの${esc(jn(S.country))}のできごとは、まだ入っていません。近い時代では…</p>`+near(inC,2).map(e=>card(e,isSel(e))).join(''):`<p class="empty">${esc(jn(S.country))}のできごとは、まだ入っていません。</p>`}
- else{title='そのころ世界では';const Wd=E.filter(e=>!e.jp&&shownCat(e));list=rank(cand.filter(e=>!e.jp));empty=`<p class="empty">この時代のできごとは、まだ少ないです。近い時代では…</p>`+near(Wd,2).map(e=>card(e,isSel(e))).join('')}
+ if(S.country&&S.country!=='Japan'){const inC=E.filter(e=>e.c===S.country&&shownCat(e));title=T('inC')(jn(S.country));list=rank(inC.filter(inw));
+  empty=inC.length?`<p class="empty">${esc(T('cEmptyNear')(jn(S.country)))}</p>`+near(inC,2).map(e=>card(e,isSel(e))).join(''):`<p class="empty">${esc(T('cEmpty')(jn(S.country)))}</p>`}
+ else{title=T('world');const Wd=E.filter(e=>!e.jp&&shownCat(e));list=rank(cand.filter(e=>!e.jp));empty=`<p class="empty">${T('wEmpty')}</p>`+near(Wd,2).map(e=>card(e,isSel(e))).join('')}
  $('wtitle').textContent=title;
  $('wlist').innerHTML=list.length?listHTML(list,'w',isSel):empty;
  const shown=S.ev!=null&&document.querySelector(`.info .list .ev[data-i="${S.ev}"]`);
- $('detail').innerHTML=S.ev!=null&&!shown?`<h2>えらんだできごと</h2>`+card(E[S.ev],{d:1}):'';
+ $('detail').innerHTML=S.ev!=null&&!shown?`<h2>${T('selected')}</h2>`+card(E[S.ev],{d:1}):'';
  draw();
 }
 document.querySelector('.info').addEventListener('click',ev=>{
@@ -451,13 +519,36 @@ document.querySelector('.info').addEventListener('click',ev=>{
 document.addEventListener('keydown',ev=>{if(ev.target===slider||ev.target.tagName==='BUTTON'||ev.target.tagName==='A')return;if(ev.key==='ArrowRight'||ev.key==='ArrowLeft'){stop();const s=ev.key==='ArrowRight'?1:-1;let y=S.year+s;if(S.year>0&&y<=0)y--;if(S.year<0&&y>=0)y++;setYear(y)}});
 addEventListener('hashchange',()=>{S.all=location.hash==='#all';update()});
 
+// ---- ことばの切り替え ----
+function applyLang(){
+ const L=I18N[LANG],root=document.documentElement;
+ root.lang=LANG;document.title=L.name;
+ document.querySelectorAll('[data-t]').forEach(el=>el.textContent=L[el.dataset.t]);
+ document.querySelectorAll('[data-ta]').forEach(el=>el.setAttribute('aria-label',L[el.dataset.ta]));
+ document.querySelectorAll('[data-lang]').forEach(el=>el.classList.toggle('on',el.dataset.lang===LANG));
+ const lb=$('langb');lb.textContent=L.langb;lb.lang=L.langl;
+ playB.setAttribute('aria-label',timer?L.pause:L.play);
+ document.querySelectorAll('.gen').forEach(el=>el.textContent=META?.generated_at?L.gen(META.generated_at.slice(0,10)):'');
+ renderTicks();renderEras();
+ if(META){renderCats();if(LANG==='en'){needEn('index-tier12.json');for(const [f,st] of chunkState)if(st==='done')needEn(f)}}
+ if(S.ev!=null)needText(E[S.ev]);
+ update();
+}
+$('langb').onclick=()=>{
+ LANG=LANG==='ja'?'en':'ja';store.set('lang',LANG);
+ const u=new URL(location.href);u.searchParams.set('lang',LANG);history.replaceState(null,'',u);
+ applyLang();
+};
+applyLang();
+
 // ---- 起動 ----
 const getJSON=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u+' '+r.status);return r.json()});
+if(LANG==='en')needEn('index-tier12.json');
 Promise.all([getJSON('countries.json'),getJSON('data/meta.json'),getJSON('data/index-tier12.json')]).then(([raw,meta,index])=>{
  META=meta;
  for(const k of CAT_DEFAULT)if(meta.categories[k])S.cats.add(k);
- renderCats();
- if(meta.generated_at)$('gen').textContent=` データの作成日：${meta.generated_at.slice(0,10)}。`;
+ applyLang();
+ 
  C=raw.map(o=>({type:'Feature',properties:{n:o.n},geometry:o.g}));
  japan=C.find(f=>f.properties.n==='Japan');
  add(index);
@@ -469,8 +560,8 @@ Promise.all([getJSON('countries.json'),getJSON('data/meta.json'),getJSON('data/i
  setYear(Number.isFinite(qy)?qy:1868);
  const first=E.find(e=>e.y===S.year&&e.jp&&e.src==='seed')||E.find(e=>e.y===S.year&&e.jp);
  if(first)pickEvent(first.i,false);
-}).catch(err=>{console.error(err);$('loading').textContent='データを読みこめませんでした。ページを開き直してください。';
- $('wlist').innerHTML='<p class="empty">データを読みこめませんでした。ファイルを直接開いたときは、ローカルのサーバー（例：npx serve app）から開いてください。</p>'});
+}).catch(err=>{console.error(err);$('loading').textContent=T('err');
+ $('wlist').innerHTML=`<p class="empty">${T('errFile')}</p>`});
 }
 </script>
 </body>

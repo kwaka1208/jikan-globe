@@ -148,7 +148,7 @@ function main() {
     chunks,
     text: texts,
     categories: Object.fromEntries(
-      Object.entries(sources.categories).map(([k, c]) => [k, { label: c.label, hidden: !!c.hidden_by_default }]),
+      Object.entries(sources.categories).map(([k, c]) => [k, { label: c.label, label_en: c.label_en, hidden: !!c.hidden_by_default }]),
     ),
     sources: [
       { name: 'Wikidata', url: 'https://www.wikidata.org/', license: 'CC0 1.0', note: 'できごとの年・場所・名前' },
