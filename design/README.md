@@ -22,6 +22,18 @@ OGP画像 `app/og.png` の元データです。文言やデザインを変える
 
 書き出したら PNG を開いて、文字のはみ出しや書体の置き換わりがないか確かめてください。文言を変えたときは、`app/index.html` の `og:image:alt` も合わせて直してください。
 
+## og-en.svg
+
+英語版の OGP 画像 `app/og-en.png` の元データです。地球儀は `og.svg` と同じで、文字だけ英語（Time Globe）にしています。地球儀や配色を変えたときは、こちらも合わせて直してください。書き出し方は `og.svg` と同じで、ファイル名だけ変えます。
+
+```sh
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless \
+  --screenshot="$PWD/app/og-en.png" --window-size=1200,630 --hide-scrollbars \
+  --virtual-time-budget=5000 "file://$PWD/design/og-en.svg"
+```
+
+SNS のクローラーは JavaScript を動かさないので、`?lang=en` では OGP を切り替えられません。英語版の OGP は共有用の入口 `app/en/index.html`（`/en/`）に書いてあり、開いた人は `../?lang=en` へ移ります。文言を変えたときは、このページの `og:image:alt` や `og:description` も合わせて直してください。
+
 ## favicon
 
 地球儀のアイコンです。日本を中心にした地球儀に、日本の位置を赤い点で示しています。
