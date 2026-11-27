@@ -39,6 +39,21 @@ button:focus-visible,input:focus-visible{outline:3px solid #ffb4ab;outline-offse
 .wrap{max-width:1240px;margin:0 auto}
 header h1{margin:0;font-size:clamp(28px,4vw,42px);line-height:1.1;font-weight:800;letter-spacing:.02em}
 header p{margin:6px 0 0;color:#c9d3ee;font-size:15px}
+header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center}header>div{display:contents}header h1{grid-area:1/1}header p{grid-area:2/1/3/3}header .helpb{grid-area:1/2}
+#help h3:first-of-type{margin-top:8px}
+.helpb{flex:none;padding:0 14px;font-size:14px}
+.linkb{padding:0;border:0;background:none;color:inherit;text-decoration:underline;min-height:44px}
+#help{width:min(560px,calc(100vw - 32px));max-height:min(86vh,720px);padding:0 22px 20px;border:0;border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 20px 60px #0008;overflow-y:auto;overscroll-behavior:contain}
+#help::backdrop{background:#0c1222b3}
+#help .hhead{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;margin:0 -22px;padding:14px 12px 8px 22px;background:var(--card)}
+#help h2{margin:0;font-size:20px}
+#help h3{font-size:16px;margin:18px 0 4px}
+#help p{margin:0 0 8px;font-size:15px;line-height:1.75}
+#help a{color:inherit}
+#help .close{width:44px;height:44px;border:0;border-radius:50%;background:transparent;font-size:18px;color:var(--sub)}
+#help .close:hover{background:var(--line)}
+#help .hfoot{margin-top:16px;text-align:center}
+#help .ok{background:var(--navy);border-color:var(--navy);padding:0 28px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto 1fr;align-content:start;grid-template-areas:"globe info" "time info";gap:14px 24px;margin-top:14px}
 #globe{grid-area:globe;position:relative;height:clamp(340px,60vh,600px);border-radius:20px}
 #globe{touch-action:none;cursor:grab}
@@ -131,8 +146,11 @@ footer a{color:inherit}
 <div class="sky">
  <div class="wrap">
   <header>
-   <h1>じかんの地球儀</h1>
-   <p>年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？</p>
+   <div>
+    <h1>じかんの地球儀</h1>
+    <p>年を動かすと、そのころ世界で起きたできごとが地球儀に出てくるよ。そのとき日本は何時代だったかな？</p>
+   </div>
+   <button class="chip helpb" type="button" data-help aria-haspopup="dialog">？ 使い方</button>
   </header>
   <div class="grid">
    <div id="globe">
@@ -175,12 +193,23 @@ footer a{color:inherit}
  </div>
 </div>
 <footer>
- <p>地球儀は指やマウスで回せます。点や国をタップすると、そこで起きたできごとが出てきます。</p>
- <p>大きくすると、もっと細かいできごとが出てきます。点が重なっているところは数字の丸になります。タップすると近づきます。</p>
- <p>できごとは、人が選んだ約130件と、Wikidata から集めたものです。集めたものは人がまだ確かめていないので、年や場所がちがうことがあります。年は代表的な説です（「ごろ」はおよその年）。国の形と国名は、昔のできごとも「いまの国」で表しています。</p>
- <p id="credits">出典：<a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）、説明文は<a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">ウィキペディア日本語版</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。それぞれの記事へのリンクを説明の下に出しています）、国境は <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>（パブリックドメイン）。<span id="gen"></span></p>
+ <p><button class="linkb" type="button" data-help aria-haspopup="dialog">使い方・出典</button></p>
  <p><a href="https://crssrds.jp/" target="_blank" rel="noopener noreferrer">© crossroads inc.</a></p>
 </footer>
+<dialog id="help" aria-labelledby="help-t">
+ <div class="hhead"><h2 id="help-t">使い方</h2><button class="close" type="button" aria-label="閉じる" data-close>✕</button></div>
+ <h3>地球儀</h3>
+ <p>地球儀は指やマウスで回せます。点や国をタップすると、そこで起きたできごとが出てきます。</p>
+ <p>大きくすると、もっと細かいできごとが出てきます。＋－のボタン、マウスのホイール、2本の指で広げたり縮めたりする操作で、大きさを変えられます。</p>
+ <p>点が重なっているところは数字の丸になります。タップすると近づきます。</p>
+ <h3>年と時代</h3>
+ <p>下のつまみを動かすか、▶ を押すと年が進みます。時代の名前を押すと、その時代に飛びます。</p>
+ <h3>できごとについて</h3>
+ <p>できごとは、人が選んだ約130件と、Wikidata から集めたものです。集めたものは人がまだ確かめていないので、年や場所がちがうことがあります。年は代表的な説です（「ごろ」はおよその年）。国の形と国名は、昔のできごとも「いまの国」で表しています。</p>
+ <h3>出典</h3>
+ <p id="credits"><a href="https://www.wikidata.org/" target="_blank" rel="noopener noreferrer">Wikidata</a>（CC0）、説明文は<a href="https://ja.wikipedia.org/" target="_blank" rel="noopener noreferrer">ウィキペディア日本語版</a>（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>。それぞれの記事へのリンクを説明の下に出しています）、国境は <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural Earth</a>（パブリックドメイン）。<span id="gen"></span></p>
+ <p class="hfoot"><button class="chip ok" type="button" data-close>閉じる</button></p>
+</dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script>
 {
@@ -323,6 +352,9 @@ host.addEventListener('wheel',ev=>{ev.preventDefault();zoom(Math.exp(-ev.deltaY*
 let zt=null;
 function setZoom(z){cancelAnimationFrame(fly);S.zoom=Math.max(ZMIN,Math.min(ZMAX,z));size();clearTimeout(zt);zt=setTimeout(update,120)}
 function zoom(f){setZoom(S.zoom*f)}
+// 使い方・出典の画面：外側（背景）か閉じるボタンで閉じる
+const help=$('help');document.querySelectorAll('[data-help]').forEach(b=>b.onclick=()=>help.showModal());
+help.addEventListener('click',ev=>{const b=help.getBoundingClientRect(),out=ev.clientX<b.left||ev.clientX>b.right||ev.clientY<b.top||ev.clientY>b.bottom;if(out||ev.target.closest('[data-close]'))help.close()});
 $('zin').onclick=()=>zoom(1.4);$('zout').onclick=()=>zoom(1/1.4);
 // タップ：いちばん近い点 → まとまりなら近づく → どれでもなければ国
 function tap([x,y]){
