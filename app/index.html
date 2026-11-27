@@ -73,6 +73,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .band i:nth-child(odd){background:#ffffff55}.band i.on{background:var(--red)}
 .ticks{position:absolute;left:0;right:0;bottom:-4px;height:18px;font-size:13px;color:#c9d3ee}
 .ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.ticks span.off{display:none}
 .ticks span:first-child{transform:none}.ticks span:last-child{transform:translateX(-100%)}
 .eras{display:flex;gap:6px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:thin}
 .eras button{flex:none;min-height:40px;padding:0 13px;border-radius:999px;border:1px solid #ffffff40;background:transparent;color:#fff;font-size:14px;font-weight:700}
@@ -108,8 +109,6 @@ h2 .mk{width:12px;height:12px;border-radius:50%;flex:none;border:2px solid #fff;
 footer{padding:20px max(4vw,16px) 36px;font-size:13px;color:var(--sub)}
 footer p{margin:0 0 6px;max-width:70ch}
 footer a{color:inherit}
-@media(max-width:600px){.ticks span:nth-child(2),.ticks span:nth-child(4),.ticks span:nth-child(6){display:none}}
-@media(max-width:420px){.ticks span:nth-child(3){display:none}}
 @media(max-width:860px){.grid{grid-template-rows:auto}.grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"globe" "time" "info"}#globe{height:min(92vw,460px)}.step.ten{display:none}}
 /* 横長の画面（タブレットの横置き・PC）：地球儀と年のつまみを一画面に収め、右のできごと一覧だけをスクロールさせる */
 @media(min-width:861px) and (orientation:landscape) and (min-height:520px){
@@ -345,6 +344,11 @@ let timer=null;const playB=$('play');
 function stop(){clearInterval(timer);timer=null;playB.textContent='▶';playB.setAttribute('aria-label','時間を進める')}
 playB.onclick=()=>{if(timer){stop();return}if(+slider.value>=999)slider.value=0;playB.textContent='❚❚';playB.setAttribute('aria-label','止める');timer=setInterval(()=>{const p=Math.min(1000,+slider.value+.7);slider.value=p;setYear(p2y(p),true);if(p>=1000)stop()},60)};
 $('ticks').innerHTML=BP.map(b=>`<span style="left:${b[0]/10}%">${b[1]<0?'前'+(-b[1]):b[1]}</span>`).join('');
+// 目盛りの文字：つまみの幅に収まらず隣と重なるものは隠す（両端は必ず残す）
+function fitTicks(){const sp=[...$('ticks').children];sp.forEach(e=>e.classList.remove('off'));
+ const R=sp.map(e=>e.getBoundingClientRect()),end=R[R.length-1].left;let prev=R[0].right;
+ for(let i=1;i<sp.length-1;i++){if(R[i].left<prev+8||R[i].right>end-8)sp[i].classList.add('off');else prev=R[i].right}}
+new ResizeObserver(fitTicks).observe($('ticks'));
 $('band').innerHTML=ERAS.filter(e=>e[1]>-3500).map(e=>{const a=y2p(Math.max(-3500,e[0])),b=y2p(Math.min(2026,e[1]));return`<i data-e="${esc(e[2])}" style="left:${a/10}%;width:${(b-a)/10}%"></i>`}).join('');
 $('eras').innerHTML=CHIPS.map(c=>`<button data-y="${c[1]}">${c[0]}</button>`).join('');
 $('eras').addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){stop();setYear(+b.dataset.y)}});
