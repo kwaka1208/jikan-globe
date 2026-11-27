@@ -111,6 +111,16 @@ footer a{color:inherit}
 @media(max-width:600px){.ticks span:nth-child(2),.ticks span:nth-child(4),.ticks span:nth-child(6){display:none}}
 @media(max-width:420px){.ticks span:nth-child(3){display:none}}
 @media(max-width:860px){.grid{grid-template-rows:auto}.grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"globe" "time" "info"}#globe{height:min(92vw,460px)}.step.ten{display:none}}
+/* 横長の画面（タブレットの横置き・PC）：地球儀と年のつまみを一画面に収め、右のできごと一覧だけをスクロールさせる */
+@media(min-width:861px) and (orientation:landscape) and (min-height:520px){
+ .sky{height:100vh;height:100dvh;display:flex;flex-direction:column;padding-top:14px;padding-bottom:14px}
+ .sky>.wrap{flex:1;min-height:0;width:100%;display:flex;flex-direction:column}
+ header p{margin-top:4px}
+ .grid{flex:1;min-height:0;grid-template-rows:minmax(0,1fr) auto;margin-top:10px}
+ #globe{height:auto;min-height:0}
+ .info{align-self:stretch;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+ .info .head{position:sticky;top:-20px;z-index:1;margin:-20px -20px 0;padding:20px 20px 10px;background:var(--card);border-radius:20px 20px 0 0}
+}
 </style>
 </head>
 <body>
@@ -146,8 +156,10 @@ footer a{color:inherit}
     <div class="cats" id="cats" role="group" aria-label="出すできごとの種類"></div>
    </div>
    <aside class="info" aria-live="polite">
-    <div class="yr" id="yr"></div>
-    <div class="jpera">日本は <b id="era"></b></div>
+    <div class="head">
+     <div class="yr" id="yr"></div>
+     <div class="jpera">日本は <b id="era"></b></div>
+    </div>
     <p class="note" id="winnote"></p>
     <div id="detail"></div>
     <h2><span class="mk" style="background:var(--red)"></span>そのころ日本では</h2>
