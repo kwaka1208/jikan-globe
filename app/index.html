@@ -389,8 +389,10 @@ $('eras').innerHTML=CHIPS.map(c=>`<button data-y="${c[1]}">${c[0]}</button>`).jo
 $('eras').addEventListener('click',ev=>{const b=ev.target.closest('button');if(b){stop();setYear(+b.dataset.y)}});
 
 // ---- カテゴリの絞り込み ----
+// データには残したまま、アプリでは選べないようにするカテゴリと、最初に出すカテゴリ
+const CAT_OFF=new Set(['city']),CAT_DEFAULT=['politics'];
 function renderCats(){
- $('cats').innerHTML='<span>出すもの</span>'+Object.entries(META.categories).map(([k,v])=>`<button data-c="${esc(k)}" aria-pressed="${S.cats.has(k)}">${esc(v.label)}</button>`).join('');
+ $('cats').innerHTML='<span>出すもの</span>'+Object.entries(META.categories).filter(([k])=>!CAT_OFF.has(k)).map(([k,v])=>`<button data-c="${esc(k)}" aria-pressed="${S.cats.has(k)}">${esc(v.label)}</button>`).join('');
 }
 $('cats').addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;const c=b.dataset.c;S.cats.has(c)?S.cats.delete(c):S.cats.add(c);b.setAttribute('aria-pressed',S.cats.has(c));
  if(S.ev!=null&&!S.cats.has(E[S.ev].cat))S.ev=null;resetMore();update()});
@@ -453,7 +455,7 @@ addEventListener('hashchange',()=>{S.all=location.hash==='#all';update()});
 const getJSON=u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u+' '+r.status);return r.json()});
 Promise.all([getJSON('countries.json'),getJSON('data/meta.json'),getJSON('data/index-tier12.json')]).then(([raw,meta,index])=>{
  META=meta;
- for(const [k,v] of Object.entries(meta.categories))if(!v.hidden)S.cats.add(k);
+ for(const k of CAT_DEFAULT)if(meta.categories[k])S.cats.add(k);
  renderCats();
  if(meta.generated_at)$('gen').textContent=` データの作成日：${meta.generated_at.slice(0,10)}。`;
  C=raw.map(o=>({type:'Feature',properties:{n:o.n},geometry:o.g}));
