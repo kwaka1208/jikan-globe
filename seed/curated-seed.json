@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "試作版で手入れした確認済みのできごと。年は正しい暦年（0年なし、負の数は紀元前）。 category は 2026-11-26 に Claude Code が付けたもの（アプリのカテゴリ絞り込み用。people は初期非表示なので、人物の誕生は sports_culture にした）。",
+ "note": "試作版で手入れした確認済みのできごと。年は正しい暦年（0年なし、負の数は紀元前）。 category は 2026-11-26 に Claude Code が付けたもの（アプリのカテゴリ絞り込み用。people は初期非表示なので、人物の誕生は sports_culture にした）。 japan_party: true は、場所は日本の外でも日本が当事者のできごと（アプリでは「そのころ日本では」に出す）。",
  "events": [
   {
    "id": "seed:0001",
@@ -1182,6 +1182,7 @@
    "text": "豊臣秀吉が朝鮮半島に大軍を送りました（1597年にも）。",
    "country": "South Korea",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1598,6 +1599,7 @@
    "text": "朝鮮をめぐって日本と清（中国）が戦い、日本が勝ちました。",
    "country": "South Korea",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1646,6 +1648,7 @@
    "text": "日本とロシアの戦争。日本が勝ち、世界をおどろかせました。",
    "country": "China",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1662,6 +1665,7 @@
    "text": "日本が韓国を併合し、1945年まで植民地として支配しました。",
    "country": "South Korea",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1694,6 +1698,7 @@
    "text": "ヨーロッパを中心にした大きな戦争。日本も参加しました。",
    "country": "Bosnia and Herz.",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1774,6 +1779,7 @@
    "text": "日本軍が中国東北部を占領し、翌年「満州国」をつくりました。",
    "country": "China",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1790,6 +1796,7 @@
    "text": "日本と中国の全面的な戦争が始まりました。",
    "country": "China",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true
@@ -1816,12 +1823,13 @@
    "approx": false,
    "lat": 21.36,
    "lng": -157.95,
-   "title": "太平洋戦争が始まる",
+   "title": "太平洋戦争（大東亜戦争）が始まる",
    "category": "war",
    "place": "ハワイ（真珠湾）",
    "text": "日本がハワイの真珠湾を攻撃し、アメリカ・イギリスなどとの戦争が始まりました。",
    "country": "United States of America",
    "japan": "link",
+   "japan_party": true,
    "tier": 1,
    "text_source": "human",
    "reviewed": true

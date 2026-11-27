@@ -122,6 +122,7 @@ function seedToEvent(s, match) {
     wikipedia_text: match?.wikipedia_text || null,
     desc_ja: match?.desc_ja || null,
     japan: s.japan,
+    japan_party: !!s.japan_party, // 場所は日本の外でも、日本が当事者のできごと
     japan_candidates: [],
     reviewed: s.reviewed !== false,
     src: 'seed',

@@ -39,6 +39,7 @@ function toShort(e) {
     src: e.src,
   };
   if (e.reviewed) o.rv = 1; // 人が確認済み（#all の表示切り替えに使う）
+  if (e.japan_party) o.jpp = 1; // 日本が当事者（場所は日本の外でも「そのころ日本では」に出す）
   return o;
 }
 

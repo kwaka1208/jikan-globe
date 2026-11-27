@@ -252,7 +252,7 @@ const grat=d3.geoGraticule10();
 let C=[],landSel=null,japan=null;
 
 // ---- できごとの扱い ----
-function add(list){for(const o of list){if(byId.has(o.id))continue;o.i=E.length;o.jp=o.c==='Japan';E.push(o);byId.set(o.id,o)}}
+function add(list){for(const o of list){if(byId.has(o.id))continue;o.i=E.length;o.jp=o.c==='Japan'||o.jpp===1;E.push(o);byId.set(o.id,o)}}
 // 年の幅（y〜ye）があるものは、始まりと終わりの年の近くで出す（長く続くものが時代じゅう出続けないように）
 const hasEnd=e=>e.ye!=null&&e.ye>e.y;
 const nearEnd=(e,y)=>hasEnd(e)&&Math.abs(gap(e.ye,y))<Math.abs(gap(e.y,y));
