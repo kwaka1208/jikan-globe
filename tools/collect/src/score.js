@@ -39,6 +39,8 @@ function applyFilters(e) {
   if (filters.max_year != null && e.year > filters.max_year) return 'future';
   const cls = (e.types || []).find((t) => filterClasses[t]);
   if (cls) return `class:${filterClasses[cls]}`;
+  // カテゴリを付け直したもの（category_overrides）は確認済みなので、除外語では外さない
+  if (filters.category_overrides?.[e.id]) return null;
   const w = findWord(e.title, filters.exclude_words) || findWord(e.desc_ja, filters.exclude_words);
   if (w) return `word:${w}`;
   return null;
@@ -182,6 +184,8 @@ function main() {
   // 1. 除外
   const kept = [];
   for (const e of events) {
+    const ov = filters.category_overrides?.[e.id];
+    if (ov) e.category = ov.category;
     const reason = applyFilters(e);
     if (reason) excluded.push({ id: e.id, category: e.category, reason, title: e.title || e.title_en, year: e.year, country: e.country });
     else kept.push(e);

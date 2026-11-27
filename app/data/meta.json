@@ -1,25 +1,25 @@
 {
  "generated_at": "2026-11-26T22:50:23.231Z",
- "count": 61363,
+ "count": 61345,
  "by_tier": {
   "1": 694,
   "2": 4899,
-  "3": 28533,
+  "3": 28515,
   "4": 27237
  },
  "by_category": {
-  "disaster": 1578,
+  "disaster": 1553,
   "building": 11454,
-  "politics": 2877,
+  "politics": 2879,
   "city": 3922,
   "people": 35574,
   "science": 272,
-  "war": 5558,
+  "war": 5563,
   "sports_culture": 128
  },
  "text_sources": {
-  "wikipedia": 48184,
-  "wikidata": 1783,
+  "wikipedia": 48171,
+  "wikidata": 1781,
   "human": 135
  },
  "years": {
@@ -29,7 +29,7 @@
  "index": {
   "file": "index-tier12.json",
   "count": 5593,
-  "gz": 208476
+  "gz": 208473
  },
  "chunks": [
   {
@@ -51,7 +51,7 @@
    "from": 854,
    "to": 1112,
    "count": 1470,
-   "gz": 53369
+   "gz": 53367
   },
   {
    "file": "chunks/1113_1243.json",
@@ -79,7 +79,7 @@
    "from": 1479,
    "to": 1560,
    "count": 1453,
-   "gz": 54131
+   "gz": 54127
   },
   {
    "file": "chunks/1561_1614.json",
@@ -107,14 +107,14 @@
    "from": 1747,
    "to": 1786,
    "count": 1384,
-   "gz": 52349
+   "gz": 52346
   },
   {
    "file": "chunks/1787_1814.json",
    "from": 1787,
    "to": 1814,
    "count": 1430,
-   "gz": 53545
+   "gz": 53550
   },
   {
    "file": "chunks/1815_1843.json",
@@ -183,8 +183,8 @@
    "file": "chunks/1931_1937.json",
    "from": 1931,
    "to": 1937,
-   "count": 1635,
-   "gz": 61853
+   "count": 1634,
+   "gz": 61819
   },
   {
    "file": "chunks/1938_1942.json",
@@ -204,15 +204,15 @@
    "file": "chunks/1948_1952.json",
    "from": 1948,
    "to": 1952,
-   "count": 1527,
-   "gz": 58025
+   "count": 1526,
+   "gz": 57969
   },
   {
    "file": "chunks/1953_1957.json",
    "from": 1953,
    "to": 1957,
-   "count": 1459,
-   "gz": 55793
+   "count": 1458,
+   "gz": 55728
   },
   {
    "file": "chunks/1958_1962.json",
@@ -232,29 +232,29 @@
    "file": "chunks/1968_1971.json",
    "from": 1968,
    "to": 1971,
-   "count": 1449,
-   "gz": 54776
+   "count": 1447,
+   "gz": 54665
   },
   {
    "file": "chunks/1972_1975.json",
    "from": 1972,
    "to": 1975,
-   "count": 1461,
-   "gz": 55559
+   "count": 1459,
+   "gz": 55445
   },
   {
    "file": "chunks/1976_1979.json",
    "from": 1976,
    "to": 1979,
-   "count": 1520,
-   "gz": 57211
+   "count": 1519,
+   "gz": 57165
   },
   {
    "file": "chunks/1980_1983.json",
    "from": 1980,
    "to": 1983,
-   "count": 1623,
-   "gz": 61962
+   "count": 1621,
+   "gz": 61862
   },
   {
    "file": "chunks/1984_1986.json",
@@ -274,8 +274,8 @@
    "file": "chunks/1990_1993.json",
    "from": 1990,
    "to": 1993,
-   "count": 1602,
-   "gz": 61770
+   "count": 1601,
+   "gz": 61722
   },
   {
    "file": "chunks/1994_1998.json",
@@ -288,15 +288,15 @@
    "file": "chunks/1999_2011.json",
    "from": 1999,
    "to": 2011,
-   "count": 1429,
-   "gz": 57531
+   "count": 1426,
+   "gz": 57388
   },
   {
    "file": "chunks/2012_2026.json",
    "from": 2012,
    "to": 2026,
-   "count": 898,
-   "gz": 33139
+   "count": 894,
+   "gz": 32961
   }
  ],
  "text": [
@@ -444,8 +444,8 @@
    "file": "text/1930_1936.json",
    "from": 1930,
    "to": 1936,
-   "count": 1420,
-   "gz": 119663
+   "count": 1419,
+   "gz": 119514
   },
   {
    "file": "text/1937_1942.json",
@@ -465,15 +465,15 @@
    "file": "text/1948_1952.json",
    "from": 1948,
    "to": 1952,
-   "count": 1336,
-   "gz": 109884
+   "count": 1335,
+   "gz": 109700
   },
   {
    "file": "text/1953_1957.json",
    "from": 1953,
    "to": 1957,
-   "count": 1349,
-   "gz": 111014
+   "count": 1348,
+   "gz": 110891
   },
   {
    "file": "text/1958_1962.json",
@@ -493,29 +493,29 @@
    "file": "text/1968_1971.json",
    "from": 1968,
    "to": 1971,
-   "count": 1349,
-   "gz": 106129
+   "count": 1348,
+   "gz": 106039
   },
   {
    "file": "text/1972_1975.json",
    "from": 1972,
    "to": 1975,
-   "count": 1335,
-   "gz": 104386
+   "count": 1334,
+   "gz": 104224
   },
   {
    "file": "text/1976_1979.json",
    "from": 1976,
    "to": 1979,
-   "count": 1432,
-   "gz": 108243
+   "count": 1431,
+   "gz": 108107
   },
   {
    "file": "text/1980_1983.json",
    "from": 1980,
    "to": 1983,
-   "count": 1520,
-   "gz": 111968
+   "count": 1518,
+   "gz": 111777
   },
   {
    "file": "text/1984_1987.json",
@@ -528,8 +528,8 @@
    "file": "text/1988_1991.json",
    "from": 1988,
    "to": 1991,
-   "count": 1615,
-   "gz": 123678
+   "count": 1614,
+   "gz": 123545
   },
   {
    "file": "text/1992_1995.json",
@@ -549,8 +549,8 @@
    "file": "text/2002_2024.json",
    "from": 2002,
    "to": 2024,
-   "count": 1318,
-   "gz": 109711
+   "count": 1312,
+   "gz": 109177
   },
   {
    "file": "text/2025_2026.json",

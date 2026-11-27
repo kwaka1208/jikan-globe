@@ -43,8 +43,15 @@ test('重複：種データの「関ヶ原の戦い」と Wikidata の同じ記�
 });
 
 test('除外：filters.yaml の語を含むタイトルが出力にない', () => {
-  const hits = all.filter((e) => filters.exclude_words.some((w) => e.t.includes(w)));
+  const ov = filters.category_overrides || {};
+  const hits = all.filter((e) => !ov[e.id] && filters.exclude_words.some((w) => e.t.includes(w)));
   assert.deepEqual(hits.map((e) => e.t), []);
+});
+
+test('カテゴリの付け直し：category_overrides のとおりになっている', () => {
+  for (const [id, o] of Object.entries(filters.category_overrides || {})) {
+    for (const e of all.filter((x) => x.id === id)) assert.equal(e.cat, o.category, o.label);
+  }
 });
 
 test('サイズ：index-tier12.json が gzip 後に500KB以下', () => {

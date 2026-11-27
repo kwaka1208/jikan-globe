@@ -51,6 +51,21 @@ exclude_words:
   - 放火殺人
   - 殺人放火
   - 殺人・放火
+  # 放火事件も災害ではない。歴史の授業で扱うものは category_overrides で残す
+  - 放火事件
+  - 放火心中
+
+# カテゴリを付け直すもの（QID → カテゴリ）。Wikidata のクラスからは「災害」に入ってしまうもの。
+# ここにあるものは確認済みとして、除外語（exclude_words）では外さない
+category_overrides:
+  Q153992: { category: politics, label: ドイツ国会議事堂放火事件 }
+  Q11616904: { category: politics, label: 英国公使館焼き討ち事件 }
+  # 戦争の中での焼き討ちは「戦い・戦争」に
+  Q65119236: { category: war, label: サザークの焼き討ち }
+  Q4999914: { category: war, label: エディンバラ焼き討ち }
+  Q198670: { category: war, label: ノーフォーク焼き討ち }
+  Q897785: { category: war, label: モスクワ焼き討ち (1812年) }
+  Q897786: { category: war, label: ワシントン焼き討ち }
 
 # タイトルや説明に含まれていたら、外さずにレビュー一覧に出す（ぎりぎりのもの）
 borderline_words:
