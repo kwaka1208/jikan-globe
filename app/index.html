@@ -42,7 +42,7 @@ header p{margin:6px 0 0;color:#c9d3ee;font-size:15px}
 header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;align-items:center}header>div{display:contents}header h1{grid-area:1/1}header p{grid-area:2/1/3/3}header .helpb{grid-area:1/2}
 #help h3:first-of-type{margin-top:8px}
 .helpb{flex:none;padding:0 14px;font-size:14px}
-#help{width:min(560px,calc(100vw - 32px));max-height:min(86vh,720px);padding:0 22px 20px;border:0;border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 20px 60px #0008;overflow-y:auto;overscroll-behavior:contain}
+#help{width:min(560px,calc(100vw - 32px));max-height:min(86vh,720px);padding:0 22px;border:0;border-radius:20px;background:var(--card);color:var(--ink);box-shadow:0 20px 60px #0008;overflow-y:auto;overscroll-behavior:contain}
 #help::backdrop{background:#0c1222b3}
 #help .hhead{position:sticky;top:0;display:flex;align-items:center;justify-content:space-between;margin:0 -22px;padding:14px 12px 8px 22px;background:var(--card)}
 #help h2{margin:0;font-size:20px}
@@ -51,7 +51,7 @@ header{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:12px;ali
 #help a{color:inherit}
 #help .close{width:44px;height:44px;border:0;border-radius:50%;background:transparent;font-size:18px;color:var(--sub)}
 #help .close:hover{background:var(--line)}
-#help .hfoot{margin-top:16px;text-align:center}
+#help .hfoot{margin:20px 0 0;padding-bottom:36px;text-align:center} /* 下の余白は .hfoot 側に持たせる（Safari はスクロールする枠の下の padding を無視するため） */
 #help .ok{background:var(--navy);border-color:var(--navy);padding:0 28px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto 1fr;align-content:start;grid-template-areas:"globe info" "time info";gap:14px 24px;margin-top:14px}
 #globe{grid-area:globe;position:relative;height:clamp(340px,60vh,600px);border-radius:20px}
